@@ -1,26 +1,57 @@
 import { JetBrains_Mono, Space_Grotesk } from 'next/font/google'
 
-import { Home, LucideProps, MessageCircleQuestion, TreeDeciduous } from 'lucide-react'
+import { Home, LucideProps, MessageCircleQuestion, Trees } from 'lucide-react'
 
 export const appConfig = {
   appName: 'superfier',
   appDescription: 'An AI-playground for testing and prototyping',
   emojiFavicon: '🌳',
-  icon: (props: LucideProps) => <TreeDeciduous {...props} />,
+  icon: (props: LucideProps) => <Trees {...props} />,
   author: 'm.hurhangee@me.com',
   github: 'https://github.com/mhurhangee/supe',
 }
 
-export const navItems = [
+export const sidebarItems = [
   {
-    name: 'Home',
-    href: '/',
-    icon: <Home className="h-4 w-4" />,
+    group: 'Main',
+    collapsible: false,
+    defaultOpen: true,
+    items: [
+      {
+        name: 'Home',
+        href: '/',
+        icon: <Home className="h-4 w-4" />,
+      }
+    ],
   },
   {
-    name: 'FAQ',
-    href: '/faq',
-    icon: <MessageCircleQuestion className="h-4 w-4" />,
+    group: 'AI Tools',
+    collapsible: true,
+    defaultOpen: true,
+    items: [
+      {
+        name: 'AI Chat',
+        href: '/ai-chat',
+        icon: <MessageCircleQuestion className="h-4 w-4" />,
+      },
+      {
+        name: 'AI Models',
+        href: '/ai-models',
+        icon: <Trees className="h-4 w-4" />,
+      },
+    ],
+  },
+  {
+    group: 'Help',
+    collapsible: true,
+    defaultOpen: false,
+    items: [
+      {
+        name: 'FAQ',
+        href: '/faq',
+        icon: <MessageCircleQuestion className="h-4 w-4" />,
+      },
+    ],
   },
 ]
 
