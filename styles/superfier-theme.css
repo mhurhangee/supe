@@ -1,0 +1,15 @@
+.superfier-container {
+  @apply mx-auto h-full max-w-4xl items-center space-y-6 p-4;
+}
+
+.superfier-title {
+  @apply flex items-center gap-2 text-4xl font-medium tracking-tight md:text-5xl;
+}
+
+.superfier-subtitle {
+  @apply text-muted-foreground max-w-xl text-xl;
+}
+
+.superfier-footer {
+  @apply text-muted-foreground flex items-center justify-center py-4 font-mono text-sm;
+}
