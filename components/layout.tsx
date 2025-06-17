@@ -17,7 +17,7 @@ export function Layout({ children }: LayoutProps) {
       <Sidebar />
       <div className="absolute top-4 right-4 z-50">
         <SidebarTrigger />
-        </div>
+      </div>
       <LayoutContent>{children}</LayoutContent>
     </SidebarProvider>
   )

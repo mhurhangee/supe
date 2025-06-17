@@ -13,7 +13,7 @@ import { MessageCircleQuestion } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 
 export default function Faq() {
-  const defaultValues = FAQ.map((_, index) => `item-${index}`);
+  const defaultValues = FAQ.map((_, index) => `item-${index}`)
 
   return (
     <Layout>
@@ -35,7 +35,6 @@ export default function Faq() {
               </AccordionItem>
             ))}
           </Accordion>
-
         </section>
       </main>
     </Layout>

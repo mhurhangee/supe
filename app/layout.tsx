@@ -1,9 +1,10 @@
+import { ClerkProvider } from '@clerk/nextjs'
+
 import type { Metadata } from 'next'
 
 import { Toaster } from '@/components/ui/sonner'
 import { ThemeProvider } from '@/components/ui/theme-provider'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import { ClerkProvider } from '@clerk/nextjs'
 
 import { appConfig, fontMono, fontSans } from '@/lib/config'
 

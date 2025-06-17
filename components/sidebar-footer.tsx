@@ -1,7 +1,6 @@
-import {
-  SidebarFooter as SidebarFooterComponent,
-} from '@/components/ui/sidebar'
 import { SignedIn, UserButton } from '@clerk/nextjs'
+
+import { SidebarFooter as SidebarFooterComponent } from '@/components/ui/sidebar'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 
 export function SidebarFooter() {
@@ -12,7 +11,6 @@ export function SidebarFooter() {
         <SignedIn>
           <UserButton />
         </SignedIn>
-
       </div>
     </SidebarFooterComponent>
   )

@@ -1,8 +1,7 @@
 import Link from 'next/link'
 
-import { SidebarHeader as SidebarHeaderComponent } from '@/components/ui/sidebar'
-
 import { Logo } from '@/components/ui/logo'
+import { SidebarHeader as SidebarHeaderComponent } from '@/components/ui/sidebar'
 
 import { appConfig } from '@/lib/config'
 

@@ -1,18 +1,40 @@
 import { JetBrains_Mono, Space_Grotesk } from 'next/font/google'
 
-import { Home, Hourglass, LucideProps, MessageCircleQuestion, LogIn, Trees, HelpCircle, LayoutGrid } from 'lucide-react'
+import {
+  HelpCircle,
+  Home,
+  Hourglass,
+  LayoutGrid,
+  LogIn,
+  LucideProps,
+  MessageCircleQuestion,
+  Trees,
+} from 'lucide-react'
 
 export const appConfig = {
   appName: 'Superfier',
   appDescription: 'A playground for testing, and prototyping my AI ideas',
   emojiFavicon: '🌳',
   icon: (props: LucideProps) => <Trees {...props} />,
-  iconBackground: "bg-gradient-to-r from-green-500 to-emerald-500",
+  iconBackground: 'bg-gradient-to-r from-green-500 to-emerald-500',
   author: 'm.hurhangee@me.com',
   github: 'https://github.com/mhurhangee/supe',
 }
 
-export const sidebarItems = [
+export interface SidebarItem {
+  group: string
+  collapsible: boolean
+  defaultOpen: boolean
+  loggedIn: boolean | null
+  items: {
+    name: string
+    href: string
+    icon: React.ReactNode
+    loggedIn: boolean | null
+  }[]
+}
+
+export const sidebarItems: SidebarItem[] = [
   {
     group: 'Navigation',
     collapsible: false,
@@ -61,11 +83,13 @@ export const sidebarItems = [
         name: 'AI Chat',
         href: '/ai-chat',
         icon: <MessageCircleQuestion className="h-4 w-4" />,
+        loggedIn: true,
       },
       {
         name: 'AI Models',
         href: '/ai-models',
         icon: <Trees className="h-4 w-4" />,
+        loggedIn: true,
       },
     ],
   },
@@ -79,6 +103,7 @@ export const sidebarItems = [
         name: 'FAQ',
         href: '/faq',
         icon: <MessageCircleQuestion className="h-4 w-4" />,
+        loggedIn: true,
       },
     ],
   },
@@ -116,7 +141,6 @@ export const FAQ = [
   },
   {
     question: 'Can I get access?',
-    answer:
-      'If you want access, please join the waitlist and I will get back to you.',
-  }
+    answer: 'If you want access, please join the waitlist and I will get back to you.',
+  },
 ]

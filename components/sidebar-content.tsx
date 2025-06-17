@@ -1,16 +1,11 @@
 'use client'
 
+import { useAuth } from '@clerk/nextjs'
+
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ChevronDown } from 'lucide-react'
-import { useAuth, useUser } from "@clerk/nextjs"
 
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible'
-
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import {
   SidebarContent as SidebarContentComponent,
   SidebarGroup,
@@ -21,30 +16,31 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 
-import { sidebarItems } from '@/lib/config'
+import { type SidebarItem, sidebarItems } from '@/lib/config'
+
+import { ChevronDown } from 'lucide-react'
 
 export function SidebarContent() {
   const pathname = usePathname()
   const { isSignedIn, isLoaded } = useAuth()
-  
+
   // Only render items that match the current authentication state
-  const shouldShowGroup = (group: any) => {
+  const shouldShowGroup = (group: SidebarItem) => {
     if (!isLoaded) return false // Don't show anything until auth is loaded
     if (group.loggedIn === null) return true // Show to everyone
     return group.loggedIn === isSignedIn // Show based on login status
   }
-  
-  const shouldShowItem = (item: any) => {
+
+  const shouldShowItem = (item: SidebarItem['items'][number]) => {
     if (!isLoaded) return false
     if (item.loggedIn === undefined || item.loggedIn === null) return true
     return item.loggedIn === isSignedIn
   }
-  
+
   return (
     <SidebarContentComponent>
-      {isLoaded && sidebarItems
-        .filter(shouldShowGroup)
-        .map((group) => (
+      {isLoaded &&
+        sidebarItems.filter(shouldShowGroup).map(group => (
           <Collapsible
             key={group.group}
             defaultOpen={group.defaultOpen}
@@ -62,22 +58,20 @@ export function SidebarContent() {
               <CollapsibleContent>
                 <SidebarGroupContent>
                   <SidebarMenu className="p-1">
-                    {group.items
-                      .filter(shouldShowItem)
-                      .map((item) => (
-                        <SidebarMenuItem key={item.href}>
-                          <SidebarMenuButton
-                            asChild
-                            tooltip={item.name}
-                            isActive={pathname === item.href}
-                          >
-                            <Link href={item.href} className="flex items-center">
-                              {item.icon}
-                              <span className="ml-2">{item.name}</span>
-                            </Link>
-                          </SidebarMenuButton>
-                        </SidebarMenuItem>
-                      ))}
+                    {group.items.filter(shouldShowItem).map(item => (
+                      <SidebarMenuItem key={item.href}>
+                        <SidebarMenuButton
+                          asChild
+                          tooltip={item.name}
+                          isActive={pathname === item.href}
+                        >
+                          <Link href={item.href} className="flex items-center">
+                            {item.icon}
+                            <span className="ml-2">{item.name}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
                   </SidebarMenu>
                 </SidebarGroupContent>
               </CollapsibleContent>
