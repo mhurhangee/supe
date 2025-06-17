@@ -3,45 +3,34 @@ import { Button } from '@/components/ui/button'
 import { Send, Square } from 'lucide-react'
 
 interface ChatSendButtonProps {
-  isMobile: boolean
   status: 'submitted' | 'streaming' | 'ready' | 'error'
   input: string
   stop: () => void
+  onSubmit: () => void
 }
 
-export const ChatSendButton = ({ isMobile, status, input, stop }: ChatSendButtonProps) => {
+export const ChatSendButton = ({ status, input, stop, onSubmit }: ChatSendButtonProps) => {
   return (
     <>
       {status === 'streaming' ? (
         <Button
           variant="destructive"
-          size={isMobile ? 'icon' : 'default'}
+          size="icon"
           disabled={status !== 'streaming'}
-          onClick={stop}
+          onClick={() => stop()}
+          className="h-8 w-8 rounded-full"
         >
-          {isMobile ? (
-            <Square className="h-4 w-4" />
-          ) : (
-            <>
-              <Square className="mr-2 h-4 w-4" />
-              Stop
-            </>
-          )}
+          <Square className="h-4 w-4" />
         </Button>
       ) : (
         <Button
           type="submit"
-          size={isMobile ? 'icon' : 'default'}
+          size="icon"
           disabled={status !== 'ready' || !input.trim()}
+          onClick={onSubmit}
+          className="h-8 w-8 rounded-full"
         >
-          {isMobile ? (
-            <Send className="h-4 w-4" />
-          ) : (
-            <>
-              <Send className="mr-2 h-4 w-4" />
-              Send
-            </>
-          )}
+          <Send className="h-4 w-4" />
         </Button>
       )}
     </>

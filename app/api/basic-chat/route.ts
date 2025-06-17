@@ -12,7 +12,10 @@ export async function POST(req: Request) {
     model: models.mini,
     system: systemPrompts.basic,
     messages,
-    experimental_transform: smoothStream(),
+    experimental_transform: smoothStream({
+      delayInMs: 20,
+      chunking: 'line',
+    }),
   })
 
   return result.toDataStreamResponse()

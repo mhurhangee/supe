@@ -1,24 +1,22 @@
 import { Button } from '@/components/ui/button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
 import type { UIMessage } from 'ai'
 import { Plus } from 'lucide-react'
 
 interface ChatNewButtonProps {
-  isMobile: boolean
   setMessages: (messages: UIMessage[]) => void
 }
 
-export const ChatNewButton = ({ isMobile, setMessages }: ChatNewButtonProps) => {
+export const ChatNewButton = ({ setMessages }: ChatNewButtonProps) => {
   return (
-    <Button className="ml-auto" variant="ghost" onClick={() => setMessages([])}>
-      {isMobile ? (
-        <Plus className="h-4 w-4" />
-      ) : (
-        <>
-          <Plus className="mr-2 h-4 w-4" />
-          New Chat
-        </>
-      )}
-    </Button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button className="ml-auto" size="icon" variant="ghost" onClick={() => setMessages([])}>
+          <Plus className="h-4 w-4" />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>New Chat</TooltipContent>
+    </Tooltip>
   )
 }
