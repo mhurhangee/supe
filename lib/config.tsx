@@ -1,6 +1,7 @@
 import { JetBrains_Mono, Space_Grotesk } from 'next/font/google'
 
 import {
+  Bot,
   HelpCircle,
   Home,
   Hourglass,
@@ -74,15 +75,15 @@ export const sidebarItems: SidebarItem[] = [
     ],
   },
   {
-    group: 'AI Tools',
+    group: 'Chats',
     collapsible: true,
     defaultOpen: true,
     loggedIn: true, // Only show this entire group to logged in users
     items: [
       {
-        name: 'AI Chat',
-        href: '/ai-chat',
-        icon: <MessageCircleQuestion className="h-4 w-4" />,
+        name: 'Basic Chat',
+        href: '/basic-chat',
+        icon: <Bot className="h-4 w-4" />,
         loggedIn: true,
       },
       {
