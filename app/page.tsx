@@ -8,7 +8,9 @@ import { appConfig } from '@/lib/config'
 
 import { Logo } from '@/components/ui/logo'
 
-import { Github, Hourglass, LogIn } from 'lucide-react'
+import { Github, Hourglass, LogIn, LayoutGrid } from 'lucide-react'
+
+import { SignedIn, SignedOut } from '@clerk/nextjs'
 
 export default function Home() {
   return (
@@ -19,12 +21,19 @@ export default function Home() {
         </h1>
         <p className="superfier-subtitle text-center ">{appConfig.appDescription}</p>
         <div className="flex items-center justify-center gap-2">
-          <Button asChild>
-            <Link href="/sign-in"><LogIn className="h-4 w-4" /> Sign In</Link>
-          </Button>
-          <Button asChild variant="outline">
-            <Link href="/waitlist"><Hourglass className="h-4 w-4" /> Waitlist</Link>
-          </Button>
+          <SignedOut>
+            <Button asChild>
+              <Link href="/sign-in"><LogIn className="h-4 w-4" /> Sign In</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link href="/waitlist"><Hourglass className="h-4 w-4" /> Waitlist</Link>
+            </Button>
+          </SignedOut>
+          <SignedIn>
+            <Button asChild>
+              <Link href="/dashboard"><LayoutGrid className="h-4 w-4" /> Dashboard</Link>
+            </Button>
+          </SignedIn>
         </div>
       </main>
       <footer className="superfier-footer">

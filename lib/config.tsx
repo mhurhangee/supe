@@ -1,6 +1,6 @@
 import { JetBrains_Mono, Space_Grotesk } from 'next/font/google'
 
-import { Home, Hourglass, LucideProps, MessageCircleQuestion, LogIn, Trees, HelpCircle } from 'lucide-react'
+import { Home, Hourglass, LucideProps, MessageCircleQuestion, LogIn, Trees, HelpCircle, LayoutGrid } from 'lucide-react'
 
 export const appConfig = {
   appName: 'Superfier',
@@ -17,13 +17,13 @@ export const sidebarItems = [
     group: 'Navigation',
     collapsible: false,
     defaultOpen: true,
-    loggedIn: false,
+    loggedIn: null,
     items: [
       {
         name: 'Home',
         href: '/',
         icon: <Home className="h-4 w-4" />,
-        loggedIn: null, // Show to everyone
+        loggedIn: false, // Show to everyone
       },
       {
         name: 'Sign In',
@@ -41,6 +41,13 @@ export const sidebarItems = [
         name: 'FAQ',
         href: '/faq',
         icon: <HelpCircle className="h-4 w-4" />,
+        loggedIn: false,
+      },
+      {
+        name: 'Dashboard',
+        href: '/dashboard',
+        icon: <LayoutGrid className="h-4 w-4" />,
+        loggedIn: true,
       },
     ],
   },

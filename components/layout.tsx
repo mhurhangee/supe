@@ -15,7 +15,9 @@ export function Layout({ children }: LayoutProps) {
   return (
     <SidebarProvider defaultOpen={true}>
       <Sidebar />
-      <SidebarTrigger className="absolute top-4 right-4 z-50" />
+      <div className="absolute top-4 right-4 z-50">
+        <SidebarTrigger />
+        </div>
       <LayoutContent>{children}</LayoutContent>
     </SidebarProvider>
   )
