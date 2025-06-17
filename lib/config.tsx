@@ -1,33 +1,54 @@
 import { JetBrains_Mono, Space_Grotesk } from 'next/font/google'
 
-import { Home, LucideProps, MessageCircleQuestion, Trees } from 'lucide-react'
+import { Home, Hourglass, LucideProps, MessageCircleQuestion, LogIn, Trees, HelpCircle } from 'lucide-react'
 
 export const appConfig = {
-  appName: 'superfier',
-  appDescription: 'An AI-playground for testing and prototyping',
+  appName: 'Superfier',
+  appDescription: 'A playground for testing, and prototyping my AI ideas',
   emojiFavicon: '🌳',
   icon: (props: LucideProps) => <Trees {...props} />,
+  iconBackground: "bg-gradient-to-r from-green-500 to-emerald-500",
   author: 'm.hurhangee@me.com',
   github: 'https://github.com/mhurhangee/supe',
 }
 
 export const sidebarItems = [
   {
-    group: 'Main',
+    group: 'Navigation',
     collapsible: false,
     defaultOpen: true,
+    loggedIn: false,
     items: [
       {
         name: 'Home',
         href: '/',
         icon: <Home className="h-4 w-4" />,
-      }
+        loggedIn: null, // Show to everyone
+      },
+      {
+        name: 'Sign In',
+        href: '/sign-in',
+        icon: <LogIn className="h-4 w-4" />,
+        loggedIn: false,
+      },
+      {
+        name: 'Waitlist',
+        href: '/waitlist',
+        icon: <Hourglass className="h-4 w-4" />,
+        loggedIn: false,
+      },
+      {
+        name: 'FAQ',
+        href: '/faq',
+        icon: <HelpCircle className="h-4 w-4" />,
+      },
     ],
   },
   {
     group: 'AI Tools',
     collapsible: true,
     defaultOpen: true,
+    loggedIn: true, // Only show this entire group to logged in users
     items: [
       {
         name: 'AI Chat',
@@ -45,6 +66,7 @@ export const sidebarItems = [
     group: 'Help',
     collapsible: true,
     defaultOpen: false,
+    loggedIn: true, // Show to everyone
     items: [
       {
         name: 'FAQ',
@@ -86,41 +108,8 @@ export const FAQ = [
       'Yes, Superfier is free and is meant to be used for testing, prototyping, and learning.',
   },
   {
-    question: 'What is Superfier?',
+    question: 'Can I get access?',
     answer:
-      "Superfier is an AI-playground for testing and prototyping. It's somewhere I can test and experiment with AI models, technologies, tools, and ideas.",
-  },
-  {
-    question: 'Where can I find the source code?',
-    answer:
-      'The source code is available on GitHub at [https://github.com/mhurhangee/supe](https://github.com/mhurhangee/supe).',
-  },
-  {
-    question: 'Who is behind Superfier?',
-    answer: 'm.hurhangee@me.com is the creator of Superfier. ',
-  },
-  {
-    question: 'Is Superfier free?',
-    answer:
-      'Yes, Superfier is free and is meant to be used for testing, prototyping, and learning.',
-  },
-  {
-    question: 'What is Superfier?',
-    answer:
-      "Superfier is an AI-playground for testing and prototyping. It's somewhere I can test and experiment with AI models, technologies, tools, and ideas.",
-  },
-  {
-    question: 'Where can I find the source code?',
-    answer:
-      'The source code is available on GitHub at [https://github.com/mhurhangee/supe](https://github.com/mhurhangee/supe).',
-  },
-  {
-    question: 'Who is behind Superfier?',
-    answer: 'm.hurhangee@me.com is the creator of Superfier. ',
-  },
-  {
-    question: 'Is Superfier free?',
-    answer:
-      'Yes, Superfier is free and is meant to be used for testing, prototyping, and learning.',
-  },
+      'If you want access, please join the waitlist and I will get back to you.',
+  }
 ]

@@ -7,21 +7,12 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 
-import { HelpCircle } from 'lucide-react'
+import { ClerkSignIn } from '@/components/clerk-signin'
 
 export function SidebarFooter() {
   return (
     <SidebarFooterComponent>
-      <SidebarMenu>
-        <SidebarMenuItem>
-          <SidebarMenuButton asChild tooltip="Settings">
-            <Link href="/faq" className="flex items-center">
-              <HelpCircle className="h-4 w-4" />
-              <span className="ml-2">FAQ</span>
-            </Link>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-      </SidebarMenu>
+      
     </SidebarFooterComponent>
   )
 }
