@@ -13,6 +13,8 @@ import { MessageCircleQuestion } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 
 export default function Faq() {
+  const defaultValues = FAQ.map((_, index) => `item-${index}`);
+
   return (
     <Layout>
       <main className="superfier-container container">
@@ -21,9 +23,9 @@ export default function Faq() {
         </h1>
         <p className="superfier-subtitle">Find answers to your questions here.</p>
         <section>
-          {FAQ.map((item, index) => (
-            <Accordion type="single" collapsible className="w-full" key={index}>
-              <AccordionItem value={`item-${index}`} className="w-full border-b-0">
+          <Accordion type="multiple" className="w-full" defaultValue={defaultValues}>
+            {FAQ.map((item, index) => (
+              <AccordionItem value={`item-${index}`} className="w-full border-b-0" key={index}>
                 <AccordionTrigger className="w-full justify-between py-4">
                   {item.question}
                 </AccordionTrigger>
@@ -31,8 +33,9 @@ export default function Faq() {
                   <ReactMarkdown>{item.answer}</ReactMarkdown>
                 </AccordionContent>
               </AccordionItem>
-            </Accordion>
-          ))}
+            ))}
+          </Accordion>
+
         </section>
       </main>
     </Layout>

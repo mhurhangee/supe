@@ -2,6 +2,7 @@
 @import 'tw-animate-css';
 @plugin '@tailwindcss/typography';
 
+@import './theme-transition.css';
 @import './superfier-theme.css';
 
 @custom-variant dark (&:is(.dark *));
