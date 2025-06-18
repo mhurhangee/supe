@@ -1,13 +1,13 @@
 import React, { KeyboardEvent, useEffect, useRef } from 'react'
 
-import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 
 import { cn } from '@/lib/utils'
 
-import { MicIcon, PaperclipIcon, SmileIcon } from 'lucide-react'
+import { Globe } from 'lucide-react'
 
 import { ChatSendButton } from './chat-send-button'
+import { Toggle } from './ui/toggle'
 
 interface ChatInputProps {
   value: string
@@ -18,6 +18,8 @@ interface ChatInputProps {
   maxRows?: number
   status: 'submitted' | 'streaming' | 'ready' | 'error'
   stop: () => void
+  toolWeb: boolean
+  setToolWeb: (value: boolean) => void
 }
 
 export function ChatInput({
@@ -29,6 +31,8 @@ export function ChatInput({
   maxRows = 5,
   status,
   stop,
+  toolWeb,
+  setToolWeb,
 }: ChatInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -96,15 +100,9 @@ export function ChatInput({
         </div>
 
         <div className="flex items-center gap-2 px-3 py-2">
-          <Button variant="ghost" size="icon" className="hover:bg-muted h-8 w-8 rounded-full">
-            <PaperclipIcon className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="icon" className="hover:bg-muted h-8 w-8 rounded-full">
-            <MicIcon className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="icon" className="hover:bg-muted h-8 w-8 rounded-full">
-            <SmileIcon className="h-4 w-4" />
-          </Button>
+          <Toggle pressed={toolWeb} onPressedChange={setToolWeb} className="rounded-full">
+            <Globe className="h-4 w-4" />
+          </Toggle>
           <div className="flex flex-1 items-center justify-end gap-2">
             <span className="text-muted-foreground text-xs">
               {value.length > 0 ? `${value.length} characters` : ''}

@@ -2,7 +2,7 @@
 
 import { useChat } from '@ai-sdk/react'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Card, CardFooter } from '@/components/ui/card'
 
@@ -12,8 +12,12 @@ import { ChatScrollArea } from '@/components/chat-scroll-area'
 import { Layout } from '@/components/layout'
 
 export default function BasicChat() {
+  const [toolWeb, setToolWeb] = useState(false)
   const { messages, input, handleInputChange, handleSubmit, setMessages, status, stop } = useChat({
     api: '/api/basic-chat',
+    body: {
+      toolWeb,
+    },
   })
 
   const messagesEndRef = useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>
@@ -47,6 +51,8 @@ export default function BasicChat() {
                 maxRows={5}
                 status={status}
                 stop={stop}
+                toolWeb={toolWeb}
+                setToolWeb={setToolWeb}
               />
             </form>
           </CardFooter>

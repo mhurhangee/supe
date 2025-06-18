@@ -1,4 +1,4 @@
-import { models, systemPrompts } from '@/lib/ai'
+import { models, systemPrompts, tools } from '@/lib/ai'
 
 import { smoothStream, streamText } from 'ai'
 
@@ -6,7 +6,7 @@ export const maxDuration = 300
 export const runtime = 'edge'
 
 export async function POST(req: Request) {
-  const { messages } = await req.json()
+  const { messages, toolWeb } = await req.json()
 
   const result = streamText({
     model: models.mini,
@@ -16,6 +16,8 @@ export async function POST(req: Request) {
       delayInMs: 20,
       chunking: 'line',
     }),
+    tools: tools,
+    toolChoice: toolWeb ? { type: 'tool', toolName: 'web_search_preview' } : 'auto',
   })
 
   return result.toDataStreamResponse()
