@@ -26,7 +26,6 @@ export const MessageDisplay = ({ message, status, lastMessage }: MessageDisplayP
         </div>
         <div className={cn('rounded-lg px-4 py-2 text-sm', isUser && 'text-muted-foreground')}>
           <Markdown>{message.content}</Markdown>
-          {JSON.stringify(message.parts)}
           {status === 'streaming' && message.role === 'assistant' && lastMessage && (
             <ChatThinking />
           )}
