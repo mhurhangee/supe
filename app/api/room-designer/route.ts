@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from "next/server"
-import OpenAI from "openai"
+import { NextRequest, NextResponse } from 'next/server'
+
+import OpenAI from 'openai'
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -8,13 +9,13 @@ const openai = new OpenAI({
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData()
-    const image = formData.get("image") as File
-    const roomType = formData.get("roomType") as string
-    const designStyle = formData.get("designStyle") as string
-    const additionalPrompt = formData.get("additionalPrompt") as string
+    const image = formData.get('image') as File
+    const roomType = formData.get('roomType') as string
+    const designStyle = formData.get('designStyle') as string
+    const additionalPrompt = formData.get('additionalPrompt') as string
 
     if (!image || !roomType || !designStyle) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
     // Convert the uploaded file to buffer
@@ -41,12 +42,12 @@ export async function POST(request: NextRequest) {
 
     // Call OpenAI's image edit API
     const response = await openai.images.edit({
-      model: "gpt-image-1",
+      model: 'gpt-image-1',
       image: imageFile,
       prompt: prompt,
-      output_format: "png",
-      size: "auto",
-      quality: "auto",
+      output_format: 'png',
+      size: 'auto',
+      quality: 'auto',
       n: 1,
     })
 
@@ -54,7 +55,7 @@ export async function POST(request: NextRequest) {
     const imageData = response.data?.[0].b64_json
 
     if (!imageData) {
-      return NextResponse.json({ error: "No image data received from OpenAI" }, { status: 500 })
+      return NextResponse.json({ error: 'No image data received from OpenAI' }, { status: 500 })
     }
 
     // Convert base64 to data URL for display
@@ -64,9 +65,8 @@ export async function POST(request: NextRequest) {
       success: true,
       imageUrl,
     })
-
-  } catch (error) {
-    console.error("Detailed error generating room design:")
-    return NextResponse.json({ error: "An unknown error occured" }, { status: 400 })
+  } catch {
+    console.error('Detailed error generating room design:')
+    return NextResponse.json({ error: 'An unknown error occured' }, { status: 400 })
   }
 }

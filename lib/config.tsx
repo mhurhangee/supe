@@ -93,7 +93,7 @@ export const sidebarItems: SidebarItem[] = [
     group: 'Image',
     collapsible: true,
     defaultOpen: true,
-    loggedIn: true, 
+    loggedIn: true,
     items: [
       {
         name: 'Room Designer',
