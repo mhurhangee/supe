@@ -1,7 +1,6 @@
 import { JetBrains_Mono, Space_Grotesk } from 'next/font/google'
 
 import {
-  Bath,
   Bot,
   HelpCircle,
   Home,
@@ -79,7 +78,7 @@ export const sidebarItems: SidebarItem[] = [
     group: 'Chats',
     collapsible: true,
     defaultOpen: true,
-    loggedIn: true,
+    loggedIn: true, // Only show this entire group to logged in users
     items: [
       {
         name: 'Basic Chat',
@@ -87,18 +86,10 @@ export const sidebarItems: SidebarItem[] = [
         icon: <Bot className="h-4 w-4" />,
         loggedIn: true,
       },
-    ],
-  },
-  {
-    group: 'Image',
-    collapsible: true,
-    defaultOpen: true,
-    loggedIn: true,
-    items: [
       {
-        name: 'Room Designer',
-        href: '/room-designer',
-        icon: <Bath className="h-4 w-4" />,
+        name: 'AI Models',
+        href: '/ai-models',
+        icon: <Trees className="h-4 w-4" />,
         loggedIn: true,
       },
     ],
