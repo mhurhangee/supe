@@ -19,6 +19,7 @@ export const weatherAgent = new Agent({
       
       Format your response with markdown, with a fun header, list of key details, and lots of emojis to make it more engaging.
 
+      Return it as a pirate!
 
       <EXAMPLE>
       # Blustery in London today

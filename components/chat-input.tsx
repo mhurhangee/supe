@@ -8,6 +8,7 @@ import { Globe } from 'lucide-react'
 
 import { ChatSendButton } from './chat-send-button'
 import { Toggle } from './ui/toggle'
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 
 interface ChatInputProps {
   value: string
@@ -100,9 +101,16 @@ export function ChatInput({
         </div>
 
         <div className="flex items-center gap-2 px-3 py-2">
-          <Toggle pressed={toolWeb} onPressedChange={setToolWeb} className="rounded-full">
-            <Globe className="h-4 w-4" />
-          </Toggle>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Toggle pressed={toolWeb} onPressedChange={setToolWeb} className="rounded-full">
+                <Globe className="h-4 w-4" />
+              </Toggle>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Toggle Web Tool</p>
+            </TooltipContent>
+          </Tooltip>
           <div className="flex flex-1 items-center justify-end gap-2">
             <span className="text-muted-foreground text-xs">
               {value.length > 0 ? `${value.length} characters` : ''}
