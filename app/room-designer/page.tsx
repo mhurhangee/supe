@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Upload, Loader2, Sparkles } from "lucide-react"
+import { Upload, Loader2, Sparkles, Bath, Loader2Icon } from "lucide-react"
 import Image from "next/image"
 import { Layout } from "@/components/layout"
 
@@ -44,60 +44,19 @@ export default function RoomDesigner() {
     const [additionalPrompt, setAdditionalPrompt] = useState<string>("")
     const [isLoading, setIsLoading] = useState(false)
     const [resultImage, setResultImage] = useState<string | null>(null)
-    const [dragActive, setDragActive] = useState(false)
-    const [aspectRatioError, setAspectRatioError] = useState<string | null>(null)
 
     const handleImageUpload = (file: File) => {
         if (file && file.type.startsWith("image/")) {
-            // Check aspect ratio before setting
+            setSelectedImage(file)
             const reader = new FileReader()
             reader.onload = (e) => {
-                const img = new window.Image()
-                img.onload = () => {
-                    const width = img.width
-                    const height = img.height
-                    const ratio = width / height
-                    // Allow 1:1 or 1.5:1 or 1:1.5 (portrait/landscape)
-                    const isSquare = Math.abs(ratio - 1) < 0.05
-                    const isLandscape = Math.abs(ratio - 1.5) < 0.05
-                    const isPortrait = Math.abs(ratio - (1 / 1.5)) < 0.05
-                    if (isSquare || isLandscape || isPortrait) {
-                        setAspectRatioError(null)
-                        setSelectedImage(file)
-                        setImagePreview(e.target?.result as string)
-                    } else {
-                        setAspectRatioError("Only square (1:1) or 1.5 (landscape or portrait) images are allowed.")
-                        setSelectedImage(null)
-                        setImagePreview(null)
-                    }
-                }
-                if (typeof e.target?.result === "string") {
-                    img.src = e.target.result
-                }
+                setImagePreview(e.target?.result as string)
             }
             reader.readAsDataURL(file)
         }
     }
 
-    const handleDrag = (e: React.DragEvent) => {
-        e.preventDefault()
-        e.stopPropagation()
-        if (e.type === "dragenter" || e.type === "dragover") {
-            setDragActive(true)
-        } else if (e.type === "dragleave") {
-            setDragActive(false)
-        }
-    }
 
-    const handleDrop = (e: React.DragEvent) => {
-        e.preventDefault()
-        e.stopPropagation()
-        setDragActive(false)
-
-        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            handleImageUpload(e.dataTransfer.files[0])
-        }
-    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -113,20 +72,10 @@ export default function RoomDesigner() {
             formData.append("designStyle", designStyle)
             formData.append("additionalPrompt", additionalPrompt)
 
-            console.log("Submitting form with:", { roomType, designStyle, imageSize: selectedImage.size })
-
-            const response = await fetch("/api/design-room", {
+            const response = await fetch("/api/room-designer", {
                 method: "POST",
                 body: formData,
             })
-
-            // Check if response is JSON
-            const contentType = response.headers.get("content-type")
-            if (!contentType || !contentType.includes("application/json")) {
-                const textResponse = await response.text()
-                console.error("Non-JSON response:", textResponse)
-                throw new Error("Server returned an invalid response. Please try again.")
-            }
 
             const data = await response.json()
 
@@ -134,20 +83,9 @@ export default function RoomDesigner() {
                 throw new Error(data.error || `HTTP error! status: ${response.status}`)
             }
 
-            console.log("Design generated successfully")
             setResultImage(data.imageUrl)
         } catch (error: any) {
-            console.error("Error:", error)
-
-            // Show more user-friendly error messages
-            let userMessage = error.message
-            if (error.message.includes("fetch")) {
-                userMessage = "Network error. Please check your connection and try again."
-            } else if (error.message.includes("JSON")) {
-                userMessage = "Server error. Please try again in a moment."
-            }
-
-            alert(`Failed to generate room design: ${userMessage}`)
+            alert(`Failed to generate room design: ${error.message}`)
         } finally {
             setIsLoading(false)
         }
@@ -155,11 +93,11 @@ export default function RoomDesigner() {
 
     return (
         <Layout>
-            <main className="container max-w-2xl py-8">
-                <h1 className="flex items-center gap-2 text-3xl font-bold text-foreground mb-2">
-                    <Sparkles className="h-8 w-8 text-primary" /> Room Designer
+            <main className="superfier-container container">
+                <h1 className="superfier-title">
+                    <Bath className="h-10 w-10" /> Room Designer
                 </h1>
-                <p className="text-muted-foreground mb-6">Transform your space with AI-powered interior design</p>
+                <p className="superfier-subtitle">Transform your space with AI-powered interior design</p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Image Upload */}
@@ -169,16 +107,10 @@ export default function RoomDesigner() {
                         </CardHeader>
                         <CardContent>
                             <label htmlFor="image-upload"
-                                className={`block border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer bg-background ${dragActive
-                                    ? "border-primary/70 bg-primary/5"
-                                    : imagePreview
+                                className={`block border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer bg-background ${imagePreview
                                         ? "border-green-500 bg-green-100 dark:bg-green-900/30"
                                         : "border-muted hover:border-accent"
                                     }`}
-                                onDragEnter={handleDrag}
-                                onDragLeave={handleDrag}
-                                onDragOver={handleDrag}
-                                onDrop={handleDrop}
                             >
                                 {imagePreview ? (
                                     <div className="space-y-4">
@@ -197,7 +129,6 @@ export default function RoomDesigner() {
                                                 onClick={() => {
                                                     setSelectedImage(null)
                                                     setImagePreview(null)
-                                                    setAspectRatioError(null)
                                                 }}
                                             >
                                                 Remove Image
@@ -216,7 +147,7 @@ export default function RoomDesigner() {
                                         <Upload className="h-12 w-12 text-muted-foreground mx-auto" />
                                         <div>
                                             <p className="text-lg font-medium text-foreground">
-                                                Drop your room image here, or click to browse
+                                                Click to upload a room image
                                             </p>
                                             <p className="text-sm text-muted-foreground mt-1">PNG, JPG, WebP up to 50MB</p>
                                         </div>
@@ -239,9 +170,6 @@ export default function RoomDesigner() {
                                     id="image-upload"
                                 />
                             </label>
-                            {aspectRatioError && (
-                                <p className="text-sm text-destructive mt-2">{aspectRatioError}</p>
-                            )}
                         </CardContent>
                     </Card>
 
@@ -304,7 +232,7 @@ export default function RoomDesigner() {
                             type="submit"
                             size="lg"
                             className="w-full"
-                            disabled={!selectedImage || !roomType || !designStyle || isLoading || !!aspectRatioError}
+                            disabled={!selectedImage || !roomType || !designStyle || isLoading}
                         >
                             {isLoading ? (
                                 <>
@@ -329,7 +257,6 @@ export default function RoomDesigner() {
                                 setDesignStyle("")
                                 setAdditionalPrompt("")
                                 setResultImage(null)
-                                setAspectRatioError(null)
                             }}
                             disabled={isLoading}
                         >
@@ -339,20 +266,33 @@ export default function RoomDesigner() {
                 </form>
 
                 {/* Result */}
-                {resultImage && (
+                {resultImage ? (
                     <Card>
                         <CardHeader>
                             <CardTitle>Your Redesigned Room</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="relative w-full max-w-2xl mx-auto">
-                                <Image
-                                    src={resultImage || "/placeholder.svg"}
+                                <img
+                                    src={resultImage}
                                     alt="Redesigned room"
-                                    width={800}
-                                    height={600}
                                     className="rounded-lg object-cover w-full"
                                 />
+                            </div>
+                        </CardContent>
+                    </Card>
+                ) : (
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>You're room will appear here</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="relative w-full max-w-2xl mx-auto">
+                                {isLoading ? (
+                                    <p className="">Designing your room</p>
+                                ) : (
+                                    <p>Once you submit the form, your room will appear here</p>
+                                )}
                             </div>
                         </CardContent>
                     </Card>
