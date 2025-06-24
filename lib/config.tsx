@@ -11,6 +11,7 @@ import {
   LucideProps,
   MessageCircleQuestion,
   Trees,
+  Umbrella,
 } from 'lucide-react'
 
 export const appConfig = {
@@ -99,6 +100,20 @@ export const sidebarItems: SidebarItem[] = [
         name: 'Room Designer',
         href: '/room-designer',
         icon: <Bath className="h-4 w-4" />,
+        loggedIn: true,
+      },
+    ],
+  },
+  {
+    group: 'Tools',
+    collapsible: true,
+    defaultOpen: true,
+    loggedIn: true,
+    items: [
+      {
+        name: 'Weather',
+        href: '/weather',
+        icon: <Umbrella className="h-4 w-4" />,
         loggedIn: true,
       },
     ],
