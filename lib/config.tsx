@@ -10,7 +10,9 @@ import {
   LogIn,
   LucideProps,
   MessageCircleQuestion,
+  PlaneTakeoff,
   Trees,
+  Umbrella,
 } from 'lucide-react'
 
 export const appConfig = {
@@ -76,15 +78,21 @@ export const sidebarItems: SidebarItem[] = [
     ],
   },
   {
-    group: 'Chats',
+    group: 'Chat UI',
     collapsible: true,
     defaultOpen: true,
     loggedIn: true,
     items: [
       {
-        name: 'Basic Chat',
-        href: '/basic-chat',
+        name: 'AI SDK Chat',
+        href: '/aisdk-chat',
         icon: <Bot className="h-4 w-4" />,
+        loggedIn: true,
+      },
+      {
+        name: 'Copilot Kit Popup',
+        href: '/copilotkit-popup',
+        icon: <PlaneTakeoff className="h-4 w-4" />,
         loggedIn: true,
       },
     ],
@@ -99,6 +107,20 @@ export const sidebarItems: SidebarItem[] = [
         name: 'Room Designer',
         href: '/room-designer',
         icon: <Bath className="h-4 w-4" />,
+        loggedIn: true,
+      },
+    ],
+  },
+  {
+    group: 'Tools',
+    collapsible: true,
+    defaultOpen: true,
+    loggedIn: true,
+    items: [
+      {
+        name: 'Weather',
+        href: '/weather',
+        icon: <Umbrella className="h-4 w-4" />,
         loggedIn: true,
       },
     ],
