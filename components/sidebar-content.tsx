@@ -57,7 +57,7 @@ export function SidebarContent() {
               </SidebarGroupLabel>
               <CollapsibleContent>
                 <SidebarGroupContent>
-                  <SidebarMenu className="p-1">
+                  <SidebarMenu className="">
                     {group.items.filter(shouldShowItem).map(item => (
                       <SidebarMenuItem key={item.href}>
                         <SidebarMenuButton
