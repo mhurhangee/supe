@@ -6,6 +6,7 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 
 import { LayoutContent } from '@/components/layout-content'
 import { Sidebar } from '@/components/sidebar'
+
 import { useIsMobile } from '@/hooks/use-mobile'
 
 interface LayoutProps {
