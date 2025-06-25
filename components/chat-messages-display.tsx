@@ -33,8 +33,8 @@ export const MessageDisplay = ({ message, status, lastMessage, debug }: MessageD
           )}
         </div>
         <div className={cn('rounded-lg px-4 py-2 text-sm', isUser && 'text-muted-foreground')}>
-          {message.parts
-            && message.parts.map(part => {
+          {message.parts &&
+            message.parts.map(part => {
               switch (part.type) {
                 case 'tool-textSearch':
                   return 'Asking for confirmation...'
@@ -43,8 +43,8 @@ export const MessageDisplay = ({ message, status, lastMessage, debug }: MessageD
               }
             })}
           <Markdown>
-            {message.parts
-              && message.parts
+            {message.parts &&
+              message.parts
                 .filter(part => part.type === 'text')
                 .map(part => part.text)
                 .join('')}

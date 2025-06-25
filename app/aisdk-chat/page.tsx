@@ -53,6 +53,7 @@ export default function BasicChat() {
             messagesEndRef={messagesEndRef}
             status={status}
             debug={debug}
+            welcomeMessage="Send a message to start chatting"
           />
 
           <CardFooter className="bg-background mt-auto shrink-0 p-4">
