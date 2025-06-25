@@ -29,7 +29,7 @@ export default function BasicChat() {
   return (
     <Layout>
       <main className="container mx-auto mt-12 flex h-[calc(100vh-4rem)] w-full max-w-4xl flex-col">
-        <Card className="bg-background flex w-full flex-1 flex-col overflow-hidden border-none shadow-none">
+        <Card className="bg-background border-card flex w-full flex-1 flex-col overflow-hidden border-none shadow-none">
           <ChatHeader setMessages={setMessages} />
 
           <ChatScrollArea messages={messages} messagesEndRef={messagesEndRef} status={status} />

@@ -3,6 +3,7 @@ import { JetBrains_Mono, Space_Grotesk } from 'next/font/google'
 import {
   Bath,
   Bot,
+  Columns2,
   HelpCircle,
   Home,
   Hourglass,
@@ -93,6 +94,12 @@ export const sidebarItems: SidebarItem[] = [
         name: 'Copilot Kit Popup',
         href: '/copilotkit-popup',
         icon: <PlaneTakeoff className="h-4 w-4" />,
+        loggedIn: true,
+      },
+      {
+        name: 'Split',
+        href: '/split',
+        icon: <Columns2 className="h-4 w-4" />,
         loggedIn: true,
       },
     ],

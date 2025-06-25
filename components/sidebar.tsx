@@ -8,7 +8,7 @@ import { SidebarHeader } from '@/components/sidebar-header'
 
 export function Sidebar() {
   return (
-    <SidebarComponent>
+    <SidebarComponent collapsible="icon">
       <SidebarHeader />
       <SidebarContent />
       <SidebarFooter />
