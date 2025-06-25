@@ -6,10 +6,9 @@ interface ChatSendButtonProps {
   status: 'submitted' | 'streaming' | 'ready' | 'error'
   input: string
   stop: () => void
-  onSubmit: () => void
 }
 
-export const ChatSendButton = ({ status, input, stop, onSubmit }: ChatSendButtonProps) => {
+export const ChatSendButton = ({ status, input, stop }: ChatSendButtonProps) => {
   return (
     <>
       {status === 'streaming' ? (
@@ -27,7 +26,6 @@ export const ChatSendButton = ({ status, input, stop, onSubmit }: ChatSendButton
           type="submit"
           size="icon"
           disabled={status !== 'ready' || !input.trim()}
-          onClick={onSubmit}
           className="h-8 w-8 rounded-full"
         >
           <Send className="h-4 w-4" />

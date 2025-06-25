@@ -1,80 +1,61 @@
-import React, { KeyboardEvent, useEffect, useRef } from 'react'
+import React, { KeyboardEvent, useRef } from 'react'
 
 import { Textarea } from '@/components/ui/textarea'
 
 import { cn } from '@/lib/utils'
 
-import { Globe } from 'lucide-react'
-
 import { ChatSendButton } from './chat-send-button'
-import { Toggle } from './ui/toggle'
-import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 
 interface ChatInputProps {
   value: string
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
-  onSubmit: () => void
   placeholder?: string
   disabled?: boolean
   maxRows?: number
   status: 'submitted' | 'streaming' | 'ready' | 'error'
   stop: () => void
-  toolWeb: boolean
-  setToolWeb: (value: boolean) => void
+  tools?: React.ReactNode
 }
 
 export function ChatInput({
   value,
   onChange,
-  onSubmit,
   placeholder = 'Type your message here...',
   disabled = false,
-  maxRows = 5,
   status,
   stop,
-  toolWeb,
-  setToolWeb,
+  tools,
 }: ChatInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  // Auto-resize the textarea based on content
-  useEffect(() => {
+  // Auto-grow textarea height as user types
+  const handleInput = () => {
     const textarea = textareaRef.current
-    if (!textarea) return
+    if (textarea) {
+      textarea.style.height = 'auto'
+      textarea.style.height = textarea.scrollHeight + 'px'
+    }
+  }
 
-    // Reset height to auto to get the correct scrollHeight
-    textarea.style.height = 'auto'
-
-    // Calculate the number of rows based on scrollHeight
-    const lineHeight = parseInt(getComputedStyle(textarea).lineHeight) || 24
-    const paddingTop = parseInt(getComputedStyle(textarea).paddingTop) || 8
-    const paddingBottom = parseInt(getComputedStyle(textarea).paddingBottom) || 8
-
-    const currentRows = Math.floor(
-      (textarea.scrollHeight - paddingTop - paddingBottom) / lineHeight
-    )
-    const rowsToUse = Math.min(currentRows, maxRows)
-
-    // Set the height based on the number of rows
-    textarea.style.height = `${rowsToUse * lineHeight + paddingTop + paddingBottom}px`
-  }, [value, maxRows])
-
-  // Auto-focus the textarea on component mount
-  useEffect(() => {
-    textareaRef.current?.focus()
-  }, [])
-
-  // Handle keyboard events
+  // Handle keyboard events for sending and newlines
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    // Prevent default Enter behavior (form submission)
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey && !e.metaKey) {
+      // Enter alone submits the form
       e.preventDefault()
-
-      // Only submit if there's content and not disabled
       if (value.trim() && !disabled) {
-        onSubmit()
+        // Find the closest form and submit it
+        const form = e.currentTarget.closest('form')
+        if (form) {
+          form.requestSubmit()
+        }
+
+        // Reset textarea height after submit
+        if (textareaRef.current) {
+          textareaRef.current.style.height = 'auto'
+        }
       }
     }
+    // Otherwise, allow default (newlines with Shift/Ctrl/Meta)
   }
 
   return (
@@ -87,6 +68,7 @@ export function ChatInput({
             ref={textareaRef}
             value={value}
             onChange={onChange}
+            onInput={handleInput}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
             disabled={disabled}
@@ -101,21 +83,12 @@ export function ChatInput({
         </div>
 
         <div className="flex items-center gap-2 px-3 py-2">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Toggle pressed={toolWeb} onPressedChange={setToolWeb} className="rounded-full">
-                <Globe className="h-4 w-4" />
-              </Toggle>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Toggle Web Tool</p>
-            </TooltipContent>
-          </Tooltip>
+          {tools}
           <div className="flex flex-1 items-center justify-end gap-2">
             <span className="text-muted-foreground text-xs">
               {value.length > 0 ? `${value.length} characters` : ''}
             </span>
-            <ChatSendButton status={status} input={value} stop={stop} onSubmit={onSubmit} />
+            <ChatSendButton status={status} input={value} stop={stop} />
           </div>
         </div>
       </div>
