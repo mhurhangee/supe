@@ -1,25 +1,20 @@
-import React, { KeyboardEvent, useEffect, useRef } from 'react'
+import React, { KeyboardEvent, useRef } from 'react'
 
 import { Textarea } from '@/components/ui/textarea'
 
 import { cn } from '@/lib/utils'
 
-import { Globe } from 'lucide-react'
-
 import { ChatSendButton } from './chat-send-button'
-import { Toggle } from './ui/toggle'
-import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 
 interface ChatInputProps {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  placeholder?: string;
-  disabled?: boolean;
-  maxRows?: number;
-  status: 'submitted' | 'streaming' | 'ready' | 'error';
-  stop: () => void;
-  toolWeb: boolean;
-  setToolWeb: (value: boolean) => void;
+  value: string
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
+  placeholder?: string
+  disabled?: boolean
+  maxRows?: number
+  status: 'submitted' | 'streaming' | 'ready' | 'error'
+  stop: () => void
+  tools?: React.ReactNode
 }
 
 export function ChatInput({
@@ -29,46 +24,39 @@ export function ChatInput({
   disabled = false,
   status,
   stop,
-  toolWeb,
-  setToolWeb,
+  tools,
 }: ChatInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-
   // Auto-grow textarea height as user types
-  const handleInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
-    const textarea = textareaRef.current;
+  const handleInput = () => {
+    const textarea = textareaRef.current
     if (textarea) {
-      textarea.style.height = 'auto';
-      textarea.style.height = textarea.scrollHeight + 'px';
+      textarea.style.height = 'auto'
+      textarea.style.height = textarea.scrollHeight + 'px'
     }
-  };
+  }
 
   // Handle keyboard events for sending and newlines
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (
-      e.key === 'Enter' &&
-      !e.shiftKey &&
-      !e.ctrlKey &&
-      !e.metaKey
-    ) {
+    if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey && !e.metaKey) {
       // Enter alone submits the form
-      e.preventDefault();
+      e.preventDefault()
       if (value.trim() && !disabled) {
         // Find the closest form and submit it
-        const form = e.currentTarget.closest('form');
+        const form = e.currentTarget.closest('form')
         if (form) {
-          form.requestSubmit();
+          form.requestSubmit()
         }
 
         // Reset textarea height after submit
         if (textareaRef.current) {
-          textareaRef.current.style.height = 'auto';
+          textareaRef.current.style.height = 'auto'
         }
       }
     }
     // Otherwise, allow default (newlines with Shift/Ctrl/Meta)
-  };
+  }
 
   return (
     <div className="border-input relative flex w-full flex-col overflow-hidden rounded-lg border shadow-sm">
@@ -95,13 +83,7 @@ export function ChatInput({
         </div>
 
         <div className="flex items-center gap-2 px-3 py-2">
-          <Toggle
-            pressed={toolWeb}
-            onPressedChange={setToolWeb}
-            className="rounded-full z-100"
-          >
-            <Globe className="h-4 w-4" />
-          </Toggle>
+          {tools}
           <div className="flex flex-1 items-center justify-end gap-2">
             <span className="text-muted-foreground text-xs">
               {value.length > 0 ? `${value.length} characters` : ''}

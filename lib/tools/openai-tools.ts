@@ -1,6 +1,6 @@
 import { openai } from '@ai-sdk/openai'
 
-const web_search_preview = openai.tools.webSearchPreview({
+export const web_search_preview = openai.tools.webSearchPreview({
   searchContextSize: 'high',
   userLocation: {
     type: 'approximate',
@@ -8,7 +8,3 @@ const web_search_preview = openai.tools.webSearchPreview({
     region: 'Hampshire',
   },
 })
-
-export const tools = {
-  web_search_preview,
-}

@@ -1,5 +1,5 @@
 import { models, systemPrompts } from '@/lib/ai'
-import { web_search_preview } from '@/lib/tools'
+import { textSearch } from '@/lib/tools'
 
 import { UIMessage, convertToModelMessages, smoothStream, streamText } from 'ai'
 
@@ -7,20 +7,20 @@ export const maxDuration = 300
 export const runtime = 'edge'
 
 export async function POST(req: Request) {
-  const { messages, toolWeb }: { messages: UIMessage[]; toolWeb: boolean } = await req.json()
+  const { messages }: { messages: UIMessage[] } = await req.json()
 
   const result = streamText({
     model: models.mini,
-    system: systemPrompts.basic,
+    system: systemPrompts.patent,
     messages: convertToModelMessages(messages),
     experimental_transform: smoothStream({
       delayInMs: 20,
       chunking: 'line',
     }),
     tools: {
-      web_search_preview,
+      textSearch,
     },
-    toolChoice: toolWeb ? { type: 'tool', toolName: 'web_search_preview' } : 'auto',
+    toolChoice: 'auto',
   })
 
   return result.toUIMessageStreamResponse()
