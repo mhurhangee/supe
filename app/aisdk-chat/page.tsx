@@ -10,14 +10,22 @@ import { ChatHeader } from '@/components/chat-header'
 import { ChatInput } from '@/components/chat-input'
 import { ChatScrollArea } from '@/components/chat-scroll-area'
 import { Layout } from '@/components/layout'
+import { DefaultChatTransport } from 'ai';
 
 export default function BasicChat() {
   const [toolWeb, setToolWeb] = useState(false)
-  const { messages, input, handleInputChange, handleSubmit, setMessages, status, stop } = useChat({
-    api: '/api/basic-chat',
+  const [input, setInput] = useState('')
+
+  // Create a transport that updates when toolWeb changes
+  const transport = new DefaultChatTransport({
+    api: '/api/aisdk-chat',
     body: {
       toolWeb,
     },
+  })
+
+  const { messages, setMessages, sendMessage, status, stop } = useChat({
+    transport,
   })
 
   const messagesEndRef = useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>
@@ -38,14 +46,14 @@ export default function BasicChat() {
             <form
               onSubmit={e => {
                 e.preventDefault()
-                handleSubmit(e)
+                sendMessage({ text: input });
+                setInput('');
               }}
               className="w-full"
             >
               <ChatInput
                 value={input}
-                onChange={handleInputChange}
-                onSubmit={handleSubmit}
+                onChange={e => setInput(e.target.value)}
                 placeholder="Type your message here..."
                 disabled={status !== 'ready'}
                 maxRows={5}
