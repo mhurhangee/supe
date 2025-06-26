@@ -13,9 +13,10 @@ import { HubLayout } from '@/components/hub-layout'
 
 export default function ParsePdfPage() {
   const [uploadedPDFFile, setUploadedPDFFile] = useState<UploadedFile[]>([])
-  const [parsedContent, setParsedContent] = useState<string>('')
+  const [parsedContent, setParsedContent] = useState<string>("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [fileUploadKey, setFileUploadKey] = useState<number>(0)
 
   const handleParsePdf = async () => {
     if (uploadedPDFFile.length === 0) return
@@ -59,6 +60,7 @@ export default function ParsePdfPage() {
         <div className="flex flex-col gap-6">
           <div className="flex w-[300px] mx-auto">
             <FileUpload
+              key={fileUploadKey} // Add key prop to force re-render when cleared
               onFilesChange={setUploadedPDFFile}
               maxFiles={1}
               maxFileSize={5 * 1024 * 1024} // 5MB
@@ -74,7 +76,13 @@ export default function ParsePdfPage() {
             >
               {isLoading ? 'Parsing...' : 'Parse PDF'}
             </Button>
-            <Button variant="outline" onClick={() => { setUploadedPDFFile([]), setIsLoading(false), setParsedContent(''), setError(null) }}
+            <Button variant="outline" onClick={() => { 
+              setUploadedPDFFile([])
+              setIsLoading(false)
+              setParsedContent('')
+              setError(null)
+              setFileUploadKey(prev => prev + 1) // Increment key to force FileUpload to reset
+            }}
             >Clear</Button>
           </div>
 
