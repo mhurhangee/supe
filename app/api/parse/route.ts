@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { getLlamaCloudApiKey } from '@/lib/utils/env-utils'
-import { parseFile } from '@/lib/utils/llama-cloud'
+import { getLlamaCloudApiKey, parseFile } from '@/lib/utils'
 
 export async function POST(request: NextRequest) {
   try {
