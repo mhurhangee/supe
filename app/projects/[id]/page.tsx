@@ -2,20 +2,60 @@
 
 import { useParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 
 import { HubLayout } from '@/components/hub-layout'
 import { ProjectActions } from '@/components/project-actions'
+import { FileActions } from '@/components/file-actions'
+
+import type { Project } from '@/lib/types/projects'
+import type { File } from '@/lib/types/files'
 
 import { formatDate } from '@/lib/utils'
 
 import { CalendarDays, FileText, FolderClosed, Tags } from 'lucide-react'
 import useSWR from 'swr'
 
-function ProjectFiles() {
-  return <div className="text-muted-foreground rounded border p-4">[Files will be shown here]</div>
+function ProjectFiles({ projectId }: { projectId: string }) {
+  const { data, error, isLoading } = useSWR(`/api/file?projectId=${projectId}`, url =>
+    fetch(url).then(res => res.json())
+  )
+  
+  const files = data?.files || []
+  
+  if (isLoading) {
+    return <Skeleton className="h-20 w-full" />
+  }
+  
+  if (error) {
+    return <div className="text-destructive">Failed to load files</div>
+  }
+  
+  if (!files.length) {
+    return <div className="text-muted-foreground rounded border p-4">No files associated with this project</div>
+  }
+  
+  return (
+    <div className="space-y-2">
+      {files.map((file: File) => (
+        <div key={file.id} className="group flex items-center justify-between rounded border p-3 hover:bg-accent/50">
+          <div className="flex items-center gap-2">
+            <FileText className="text-muted-foreground h-4 w-4" />
+            <Link href={`/files/${file.id}`} className="font-medium hover:underline">
+              {file.title}
+            </Link>
+            <span className="text-muted-foreground text-xs">{formatDate(file.createdAt)}</span>
+          </div>
+          <div className="flex items-center gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+            <FileActions file={file} showOpenButton={false} />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
 }
 function ProjectChats() {
   return <div className="text-muted-foreground rounded border p-4">[Chats will be shown here]</div>
@@ -105,7 +145,7 @@ export default function ProjectDetailsPage() {
             <h3 className="flex items-center gap-2 font-semibold">
               <FileText className="h-4 w-4" /> Files
             </h3>
-            <ProjectFiles />
+            <ProjectFiles projectId={id} />
             <h3 className="flex items-center gap-2 font-semibold">
               <FileText className="h-4 w-4" /> Chats
             </h3>

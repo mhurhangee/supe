@@ -103,10 +103,10 @@ export function HubLayout({
           )}
         </div>
         {!isMobile && backTo && (
-          <div>
             <Button
               variant="ghost"
-              className="text-muted-foreground gap-1 px-2 font-medium"
+              size="sm"
+              className="text-muted-foreground font-medium"
               asChild
             >
               <Link href={backTo.href}>
@@ -114,7 +114,6 @@ export function HubLayout({
                 {backTo.label}
               </Link>
             </Button>
-          </div>
         )}
 
         {/* Allow actions in the top bar for easier mobile access */}

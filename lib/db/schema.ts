@@ -16,9 +16,9 @@ export const files = pgTable('files', {
   projectId: varchar('project_id', { length: 255 }),
   title: varchar('title', { length: 255 }).notNull(),
   description: varchar('description', { length: 512 }),
-  type: varchar('type', { length: 50 }).notNull(),
-  content: jsonb('content'),
-  metadata: jsonb('metadata'),
+  tags: text('tags').array().notNull().default([]),
+  url: varchar('url', { length: 255 }).notNull(),
+  parsedContent: text('parsed_content'),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 })
