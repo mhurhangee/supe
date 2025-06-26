@@ -1,5 +1,5 @@
 import { models, systemPrompts } from '@/lib/ai'
-import { textSearch } from '@/lib/tools'
+import { textSearch } from '@/lib/ai-tools'
 
 import { UIMessage, convertToModelMessages, smoothStream, streamText } from 'ai'
 

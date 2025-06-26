@@ -6,6 +6,8 @@ import { Toaster } from '@/components/ui/sonner'
 import { ThemeProvider } from '@/components/ui/theme-provider'
 import { TooltipProvider } from '@/components/ui/tooltip'
 
+import { Layout } from '@/components/layout'
+
 import { appConfig, fontMono, fontSans } from '@/lib/config'
 
 import '@/styles/globals.css'
@@ -41,8 +43,10 @@ export default function RootLayout({
         <body className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased`}>
           <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
             <TooltipProvider>
-              {children}
-              <Toaster position="top-center" />
+              <Layout>
+                {children}
+                <Toaster position="top-center" />
+              </Layout>
             </TooltipProvider>
           </ThemeProvider>
         </body>

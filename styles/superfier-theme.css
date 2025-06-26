@@ -1,5 +1,5 @@
 .superfier-container {
-  @apply mx-auto h-full max-w-4xl items-center space-y-6 p-4;
+  @apply mx-auto h-full max-w-7xl items-center space-y-6 p-4;
 }
 
 .superfier-title {
