@@ -16,7 +16,6 @@ export default function ClaimExtractorPage() {
         api: '/api/pdf-claim-extract',
     })
 
-
     const { messages, setMessages, sendMessage, status, stop } = useChat({
         transport,
     })

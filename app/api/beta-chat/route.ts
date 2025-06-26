@@ -1,5 +1,5 @@
 import { models, systemPrompts } from '@/lib/ai'
-import { web_search_preview } from '@/lib/tools'
+import { web_search_preview } from '@/lib/ai-tools'
 
 import { UIMessage, convertToModelMessages, smoothStream, streamText } from 'ai'
 
