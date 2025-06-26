@@ -10,7 +10,6 @@ import { ChatHeader } from '@/components/chat-header'
 import { ChatInput } from '@/components/chat-input'
 import { ChatScrollArea } from '@/components/chat-scroll-area'
 import { ChatTools } from '@/components/chat-tools'
-import { Layout } from '@/components/layout'
 
 import { DefaultChatTransport } from 'ai'
 import { Bot } from 'lucide-react'
@@ -22,7 +21,7 @@ export default function BasicChat() {
 
   // Create a transport that updates when toolWeb changes
   const transport = new DefaultChatTransport({
-    api: '/api/aisdk-chat',
+    api: '/api/beta-chat',
     body: {
       toolWeb,
     },
@@ -39,7 +38,6 @@ export default function BasicChat() {
   }, [messages])
 
   return (
-    <Layout>
       <main className="container mx-auto mt-12 flex h-[calc(100vh-4rem)] w-full max-w-4xl flex-col">
         <Card className="bg-background border-card flex w-full flex-1 flex-col overflow-hidden border-none shadow-none">
           <ChatHeader
@@ -86,6 +84,5 @@ export default function BasicChat() {
           </CardFooter>
         </Card>
       </main>
-    </Layout>
   )
 }

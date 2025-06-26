@@ -5,15 +5,13 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/ui/logo'
 
-import { Layout } from '@/components/layout'
-
 import { appConfig } from '@/lib/config'
 
 import { Github, Hourglass, LayoutGrid, LogIn } from 'lucide-react'
 
 export default function Home() {
   return (
-    <Layout>
+    <>
       <main className="superfier-container flex flex-col items-center justify-center">
         <h1 className="superfier-title">
           <Logo iconSize="h-10 w-10" bgSize="h-12 w-12" /> {appConfig.appName}
@@ -48,6 +46,6 @@ export default function Home() {
           <Github className="ml-2 h-4 w-4" />
         </Link>
       </footer>
-    </Layout>
+    </>
   )
 }

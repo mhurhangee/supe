@@ -8,6 +8,8 @@ import { TooltipProvider } from '@/components/ui/tooltip'
 
 import { appConfig, fontMono, fontSans } from '@/lib/config'
 
+import { Layout } from '@/components/layout'
+
 import '@/styles/globals.css'
 
 const title = `${appConfig.appName} | ${appConfig.appDescription}`
@@ -41,8 +43,10 @@ export default function RootLayout({
         <body className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased`}>
           <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
             <TooltipProvider>
+              <Layout>
               {children}
               <Toaster position="top-center" />
+              </Layout>
             </TooltipProvider>
           </ThemeProvider>
         </body>

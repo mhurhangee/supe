@@ -31,7 +31,6 @@ export default function PatChatPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>
 
   return (
-    <Layout>
       <main className="container mx-auto mt-12 flex h-[calc(100vh-4rem)] w-full max-w-4xl flex-col">
         <Card className="bg-background border-card flex w-full flex-1 flex-col overflow-hidden border-none shadow-none">
           <ChatHeader
@@ -70,6 +69,5 @@ export default function PatChatPage() {
           </CardFooter>
         </Card>
       </main>
-    </Layout>
-  )
+    )
 }

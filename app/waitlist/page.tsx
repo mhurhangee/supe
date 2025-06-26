@@ -1,12 +1,9 @@
 import { Waitlist } from '@clerk/nextjs'
 
-import { Layout } from '@/components/layout'
-
 import { Hourglass } from 'lucide-react'
 
 export default function WaitlistPage() {
   return (
-    <Layout>
       <main className="superfier-container container">
         <h1 className="superfier-title">
           <Hourglass className="h-10 w-10" /> Waitlist
@@ -18,6 +15,5 @@ export default function WaitlistPage() {
           <Waitlist />
         </section>
       </main>
-    </Layout>
   )
 }

@@ -5,8 +5,6 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 
-import { Layout } from '@/components/layout'
-
 import { FAQ } from '@/lib/config'
 
 import { MessageCircleQuestion } from 'lucide-react'
@@ -16,7 +14,6 @@ export default function Faq() {
   const defaultValues = FAQ.map((_, index) => `item-${index}`)
 
   return (
-    <Layout>
       <main className="superfier-container container">
         <h1 className="superfier-title">
           <MessageCircleQuestion className="h-10 w-10" /> FAQ
@@ -37,6 +34,5 @@ export default function Faq() {
           </Accordion>
         </section>
       </main>
-    </Layout>
   )
 }
