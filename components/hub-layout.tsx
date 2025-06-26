@@ -127,8 +127,6 @@ export function HubLayout({
                     className
                 )}
             >
-
-
                 {/* Header section */}
                 {(title || description || (!isMobile && combinedActions)) && (
                     <div className="mb-8">

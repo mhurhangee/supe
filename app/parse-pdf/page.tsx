@@ -5,8 +5,11 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { FileUpload, type UploadedFile } from '@/components/ui/file-upload'
-
-import { FileCode } from 'lucide-react'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import { FileCode, Loader2 } from 'lucide-react'
+import { Markdown } from '@/components/markdown'
+import { Skeleton } from '@/components/ui/skeleton'
+import { HubLayout } from '@/components/hub-layout'
 
 export default function ParsePdfPage() {
   const [uploadedPDFFile, setUploadedPDFFile] = useState<UploadedFile[]>([])
@@ -46,42 +49,71 @@ export default function ParsePdfPage() {
   }
 
   return (
-    <main className="superfier-container container">
-      <h1 className="superfier-title">
-        <FileCode className="h-10 w-10" /> Parse PDF
-      </h1>
-      <p className="superfier-subtitle">Upload a PDF file and we will parse it for you.</p>
+    <HubLayout
+      title={<span className="flex items-center gap-2">Parse PDF</span>}
+      description="Upload a PDF file and parse it into markdown."
+      icon={<FileCode />}
+      breadcrumbs={[{ label: 'Parse PDF' }]}
+    >
 
-      <div className="grid gap-6">
-        <FileUpload
-          onFilesChange={setUploadedPDFFile}
-          maxFiles={1}
-          maxFileSize={5 * 1024 * 1024} // 5MB
-          acceptedFileTypes={['.pdf']}
-          title="Upload a PDF of a patent or application"
-          description="Drag & drop or click to upload"
-        />
+        <div className="flex flex-col gap-6">
+          <div className="flex w-[300px] mx-auto">
+            <FileUpload
+              onFilesChange={setUploadedPDFFile}
+              maxFiles={1}
+              maxFileSize={5 * 1024 * 1024} // 5MB
+              acceptedFileTypes={['.pdf']}
+              title="Upload a PDF of a patent or application"
+              description="Drag & drop or click to upload"
+            />
+          </div>
+          <div className="flex justify-center gap-2">
+            <Button
+              onClick={handleParsePdf}
+              disabled={isLoading || uploadedPDFFile.length === 0}
+            >
+              {isLoading ? 'Parsing...' : 'Parse PDF'}
+            </Button>
+            <Button variant="outline" onClick={() => { setUploadedPDFFile([]), setIsLoading(false), setParsedContent(''), setError(null) }}
+            >Clear</Button>
+          </div>
 
-        <Button
-          onClick={handleParsePdf}
-          disabled={isLoading || uploadedPDFFile.length === 0}
-          className="w-full"
-        >
-          {isLoading ? 'Parsing...' : 'Parse PDF'}
-        </Button>
+          {error && <div className="rounded-md bg-red-50 p-4 text-red-700">{error}</div>}
 
-        {error && <div className="rounded-md bg-red-50 p-4 text-red-700">{error}</div>}
+          {parsedContent && <Tabs defaultValue="parsed-content">
+            <TabsList>
+              <TabsTrigger value="parsed-content">Parsed Content</TabsTrigger>
+              <TabsTrigger value="raw-content">Raw Content</TabsTrigger>
+            </TabsList>
+            <TabsContent value="parsed-content">
+              <Card className="p-4">
+                <div className="prose max-w-none">
+                  <Markdown>{parsedContent}</Markdown>
+                </div>
+              </Card>
+            </TabsContent>
+            <TabsContent value="raw-content">
+              <Card className="p-4">
+                <div className="prose max-w-none">
+                  <pre className="whitespace-pre-wrap">{parsedContent}</pre>
+                </div>
+              </Card>
+            </TabsContent>
+          </Tabs>}
 
-        {parsedContent && (
-          <Card className="max-h-[60vh] overflow-auto p-4">
-            <h2 className="mb-4 text-xl font-semibold">Parsed Content</h2>
-            <div className="prose max-w-none">
-              {/* Use a pre tag for preserving whitespace */}
-              <pre className="whitespace-pre-wrap">{parsedContent}</pre>
+          {isLoading && (
+            <div className="flex flex-col items-center justify-center py-8">
+              <Card className="w-full max-w-md p-6">
+                <div className="flex flex-col items-center gap-4 text-center">
+                  <Loader2 className="h-10 w-10 animate-spin text-primary" />
+                  <p className="text-lg font-medium animate-pulse">Processing your PDF...</p>
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                </div>
+              </Card>
             </div>
-          </Card>
-        )}
-      </div>
-    </main>
+          )}
+        </div>
+    </HubLayout>
   )
 }
