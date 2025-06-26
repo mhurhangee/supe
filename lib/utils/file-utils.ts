@@ -1,19 +1,19 @@
 import { UIMessage } from 'ai'
 
 export const formatFileSize = (bytes: number): string => {
-  if (bytes === 0) return "0 Bytes"
+  if (bytes === 0) return '0 Bytes'
   const k = 1024
-  const sizes = ["Bytes", "KB", "MB", "GB"]
+  const sizes = ['Bytes', 'KB', 'MB', 'GB']
   const i = Math.floor(Math.log(bytes) / Math.log(k))
-  return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i]
+  return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
 
 export const isImageFile = (file: File): boolean => {
-  return file.type.startsWith("image/")
+  return file.type.startsWith('image/')
 }
 
 export const isPdfFile = (file: File): boolean => {
-  return file.type === "application/pdf"
+  return file.type === 'application/pdf'
 }
 
 export const fileToDataUrl = (file: File): Promise<string> => {
@@ -25,16 +25,20 @@ export const fileToDataUrl = (file: File): Promise<string> => {
   })
 }
 
-export const validateFile = (file: File, acceptedTypes?: string[], maxSize?: number): string | null => {
+export const validateFile = (
+  file: File,
+  acceptedTypes?: string[],
+  maxSize?: number
+): string | null => {
   if (acceptedTypes && acceptedTypes.length > 0) {
-    const isAccepted = acceptedTypes.some((type) => {
-      if (type.startsWith(".")) {
+    const isAccepted = acceptedTypes.some(type => {
+      if (type.startsWith('.')) {
         return file.name.toLowerCase().endsWith(type.toLowerCase())
       }
-      return file.type.match(type.replace("*", ".*"))
+      return file.type.match(type.replace('*', '.*'))
     })
     if (!isAccepted) {
-      return `File type not accepted. Accepted types: ${acceptedTypes.join(", ")}`
+      return `File type not accepted. Accepted types: ${acceptedTypes.join(', ')}`
     }
   }
 
@@ -50,20 +54,23 @@ export const validateFile = (file: File, acceptedTypes?: string[], maxSize?: num
  * @param messages Array of UI messages
  * @returns Object containing dataUrl and fileName, or null if no PDF is found
  */
-export function extractPdfDataUrl(messages: UIMessage[]): { dataUrl: string | null, fileName: string | null } {
+export function extractPdfDataUrl(messages: UIMessage[]): {
+  dataUrl: string | null
+  fileName: string | null
+} {
   // Look for the last message with a PDF file
   for (let i = messages.length - 1; i >= 0; i--) {
-    const message = messages[i];
+    const message = messages[i]
     for (const part of message.parts) {
       if (part.type === 'file' && part.mediaType === 'application/pdf' && part.url) {
-        return { 
+        return {
           dataUrl: part.url,
-          fileName: part.filename || 'document.pdf'
-        };
+          fileName: part.filename || 'document.pdf',
+        }
       }
     }
   }
-  return { dataUrl: null, fileName: null };
+  return { dataUrl: null, fileName: null }
 }
 
 /**
@@ -73,15 +80,15 @@ export function extractPdfDataUrl(messages: UIMessage[]): { dataUrl: string | nu
  */
 export async function dataUrlToArrayBuffer(dataUrl: string): Promise<ArrayBuffer> {
   // Remove the data URL prefix and decode base64
-  const base64 = dataUrl.split(',')[1];
-  const binaryString = atob(base64);
-  const bytes = new Uint8Array(binaryString.length);
-  
+  const base64 = dataUrl.split(',')[1]
+  const binaryString = atob(base64)
+  const bytes = new Uint8Array(binaryString.length)
+
   for (let i = 0; i < binaryString.length; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
+    bytes[i] = binaryString.charCodeAt(i)
   }
-  
-  return bytes.buffer;
+
+  return bytes.buffer
 }
 
 /**
@@ -90,31 +97,33 @@ export async function dataUrlToArrayBuffer(dataUrl: string): Promise<ArrayBuffer
  * @param markdownResult OCR result in markdown format
  * @returns The modified messages array
  */
-export function appendOcrResultToMessage(messages: UIMessage[], markdownResult: string): UIMessage[] {
-  const lastMessageIndex = messages.length - 1;
-  if (lastMessageIndex < 0) return messages;
-  
-  const lastMessage = messages[lastMessageIndex];
-  
+export function appendOcrResultToMessage(
+  messages: UIMessage[],
+  markdownResult: string
+): UIMessage[] {
+  const lastMessageIndex = messages.length - 1
+  if (lastMessageIndex < 0) return messages
+
+  const lastMessage = messages[lastMessageIndex]
+
   // Find the text part or create a new one
-  let textPartIndex = lastMessage.parts.findIndex(part => part.type === 'text');
-  
+  const textPartIndex = lastMessage.parts.findIndex(part => part.type === 'text')
+
   if (textPartIndex >= 0) {
     // Append to existing text part
-    const textPart = lastMessage.parts[textPartIndex] as { type: 'text', text: string };
+    const textPart = lastMessage.parts[textPartIndex] as { type: 'text'; text: string }
     // Create a new part with the same type and updated text
     lastMessage.parts[textPartIndex] = {
       type: 'text',
-      text: `${textPart.text}\n\nOCR Result from PDF:\n\n${markdownResult}`
-    };
+      text: `${textPart.text}\n\nOCR Result from PDF:\n\n${markdownResult}`,
+    }
   } else {
     // Add a new text part
     lastMessage.parts.push({
       type: 'text',
-      text: `OCR Result from PDF:\n\n${markdownResult}`
-    });
+      text: `OCR Result from PDF:\n\n${markdownResult}`,
+    })
   }
-  
-  return messages;
+
+  return messages
 }
-  

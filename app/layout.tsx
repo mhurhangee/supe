@@ -6,9 +6,9 @@ import { Toaster } from '@/components/ui/sonner'
 import { ThemeProvider } from '@/components/ui/theme-provider'
 import { TooltipProvider } from '@/components/ui/tooltip'
 
-import { appConfig, fontMono, fontSans } from '@/lib/config'
-
 import { Layout } from '@/components/layout'
+
+import { appConfig, fontMono, fontSans } from '@/lib/config'
 
 import '@/styles/globals.css'
 
@@ -44,8 +44,8 @@ export default function RootLayout({
           <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
             <TooltipProvider>
               <Layout>
-              {children}
-              <Toaster position="top-center" />
+                {children}
+                <Toaster position="top-center" />
               </Layout>
             </TooltipProvider>
           </ThemeProvider>

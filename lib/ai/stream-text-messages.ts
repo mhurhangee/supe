@@ -1,19 +1,16 @@
-import { models } from "./models"
-import { streamText, smoothStream, convertToModelMessages, type UIMessage } from "ai"
+import { type UIMessage, convertToModelMessages, smoothStream, streamText } from 'ai'
 
-export async function streamTextMessages({
-    messages,
-}: {
-    messages: UIMessage[]
-}) {
-    const result = streamText({
-        model: models.mini,
-        messages: convertToModelMessages(messages),
-        experimental_transform: smoothStream({
-            delayInMs: 20,
-            chunking: 'line',
-        }),
-    })
+import { models } from './models'
 
-    return result.toUIMessageStreamResponse()
+export async function streamTextMessages({ messages }: { messages: UIMessage[] }) {
+  const result = streamText({
+    model: models.mini,
+    messages: convertToModelMessages(messages),
+    experimental_transform: smoothStream({
+      delayInMs: 20,
+      chunking: 'line',
+    }),
+  })
+
+  return result.toUIMessageStreamResponse()
 }

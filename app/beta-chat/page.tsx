@@ -38,51 +38,51 @@ export default function BasicChat() {
   }, [messages])
 
   return (
-      <main className="container mx-auto mt-12 flex h-[calc(100vh-4rem)] w-full max-w-4xl flex-col">
-        <Card className="bg-background border-card flex w-full flex-1 flex-col overflow-hidden border-none shadow-none">
-          <ChatHeader
-            setMessages={setMessages}
-            title="AI SDK v5 Chat"
-            icon={<Bot className="h-5 w-5" />}
-          />
+    <main className="container mx-auto mt-12 flex h-[calc(100vh-4rem)] w-full max-w-4xl flex-col">
+      <Card className="bg-background border-card flex w-full flex-1 flex-col overflow-hidden border-none shadow-none">
+        <ChatHeader
+          setMessages={setMessages}
+          title="AI SDK v5 Chat"
+          icon={<Bot className="h-5 w-5" />}
+        />
 
-          <ChatScrollArea
-            messages={messages}
-            messagesEndRef={messagesEndRef}
-            status={status}
-            debug={debug}
-            welcomeMessage="Send a message to start chatting"
-          />
+        <ChatScrollArea
+          messages={messages}
+          messagesEndRef={messagesEndRef}
+          status={status}
+          debug={debug}
+          welcomeMessage="Send a message to start chatting"
+        />
 
-          <CardFooter className="bg-background mt-auto shrink-0 p-4">
-            <form
-              onSubmit={e => {
-                e.preventDefault()
-                sendMessage({ text: input })
-                setInput('')
-              }}
-              className="w-full"
-            >
-              <ChatInput
-                value={input}
-                onChange={e => setInput(e.target.value)}
-                placeholder="Type your message here..."
-                disabled={status !== 'ready'}
-                maxRows={5}
-                status={status}
-                stop={stop}
-                tools={
-                  <ChatTools
-                    toolWeb={toolWeb}
-                    setToolWeb={setToolWeb}
-                    debug={debug}
-                    setDebug={setDebug}
-                  />
-                }
-              />
-            </form>
-          </CardFooter>
-        </Card>
-      </main>
+        <CardFooter className="bg-background mt-auto shrink-0 p-4">
+          <form
+            onSubmit={e => {
+              e.preventDefault()
+              sendMessage({ text: input })
+              setInput('')
+            }}
+            className="w-full"
+          >
+            <ChatInput
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              placeholder="Type your message here..."
+              disabled={status !== 'ready'}
+              maxRows={5}
+              status={status}
+              stop={stop}
+              tools={
+                <ChatTools
+                  toolWeb={toolWeb}
+                  setToolWeb={setToolWeb}
+                  debug={debug}
+                  setDebug={setDebug}
+                />
+              }
+            />
+          </form>
+        </CardFooter>
+      </Card>
+    </main>
   )
 }
