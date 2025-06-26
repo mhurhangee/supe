@@ -23,7 +23,7 @@ export default function ParsePdfPage() {
             const formData = new FormData()
             formData.append('file', uploadedPDFFile[0].file)
             
-            const response = await fetch('/api/old-parse', {
+            const response = await fetch('/api/parse', {
                 method: 'POST',
                 body: formData,
             })
