@@ -20,6 +20,7 @@ export type File = z.infer<typeof FileSchema>
 export const FileUpdateSchema = FileSchema.pick({
   title: true,
   description: true,
+  projectId: true,
   updatedAt: true,
 })
 

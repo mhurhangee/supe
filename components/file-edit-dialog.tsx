@@ -14,13 +14,23 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 
 import type { File } from '@/lib/types/files'
+import type { Project } from '@/lib/types/projects'
 import { FileUpdateSchema } from '@/lib/types/files'
+import { fetcher } from '@/lib/utils'
 import { parseClientIO } from '@/lib/utils/parse-client-io'
 
 import { toast } from 'sonner'
+import useSWR from 'swr'
 
 interface FileEditDialogProps {
   file: File
@@ -33,7 +43,11 @@ export function FileEditDialog({ file, children, onUpdated }: FileEditDialogProp
   const [loading, setLoading] = useState(false)
   const [title, setTitle] = useState(file.title)
   const [description, setDescription] = useState(file.description || '')
+  const [projectId, setProjectId] = useState(file.projectId || 'none')
   const [error, setError] = useState<string | null>(null)
+  
+  // Fetch projects for dropdown
+  const { data: projectsData } = useSWR<{ projects: Project[] }>('/api/project', fetcher)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -41,6 +55,7 @@ export function FileEditDialog({ file, children, onUpdated }: FileEditDialogProp
     const { success, error: parseError } = parseClientIO(FileUpdateSchema, {
       title,
       description,
+      projectId: projectId !== 'none' ? projectId : undefined,
     })
     if (!success) {
       setError(parseError)
@@ -51,7 +66,11 @@ export function FileEditDialog({ file, children, onUpdated }: FileEditDialogProp
       const res = await fetch(`/api/file/${file.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, description }),
+        body: JSON.stringify({
+          title,
+          description,
+          projectId: projectId !== 'none' ? projectId : undefined,
+        }),
       })
       const data = await res.json()
       if (!res.ok || !data.success) throw new Error(data.error || 'Failed to update file')
@@ -91,6 +110,19 @@ export function FileEditDialog({ file, children, onUpdated }: FileEditDialogProp
             maxLength={512}
             disabled={loading}
           />
+          <Select value={projectId} onValueChange={setProjectId} disabled={loading}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select project (optional)" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">No project</SelectItem>
+              {projectsData?.projects?.map(project => (
+                <SelectItem key={project.id} value={project.id}>
+                  {project.title}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           {error && <div className="text-destructive text-sm">{error}</div>}
           <DialogFooter>
             <DialogClose asChild>

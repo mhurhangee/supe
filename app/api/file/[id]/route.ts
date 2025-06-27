@@ -43,12 +43,12 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     const id = (await params).id
 
     // Parse request body or throw error
-    const { title, description } = parseIO(FileUpdateSchema, await req.json())
+    const { title, description, projectId } = parseIO(FileUpdateSchema, await req.json())
 
     // Build update data
     const updateData = {
       ...Object.fromEntries(
-        Object.entries({ title, description }).filter(([, v]) => v !== undefined)
+        Object.entries({ title, description, projectId }).filter(([, v]) => v !== undefined)
       ),
       updatedAt: new Date(),
     }
