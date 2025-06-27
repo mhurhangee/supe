@@ -2,8 +2,8 @@ import Link from 'next/link'
 
 import { Logo } from '@/components/ui/logo'
 import { SidebarHeader as SidebarHeaderComponent } from '@/components/ui/sidebar'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { SidebarTrigger } from '@/components/ui/sidebar'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
 import { appConfig } from '@/lib/config'
 

@@ -50,12 +50,7 @@ export function FileActions({
           onDeleted?.()
         }}
       >
-        <Button
-          size="icon"
-          variant="ghost"
-          className="text-destructive"
-          aria-label="Delete file"
-        >
+        <Button size="icon" variant="ghost" className="text-destructive" aria-label="Delete file">
           <Trash2 className="h-4 w-4" />
         </Button>
       </FileDeleteDialog>

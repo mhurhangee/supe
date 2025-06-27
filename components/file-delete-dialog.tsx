@@ -66,12 +66,7 @@ export function FileDeleteDialog({ file, children, onDeleted }: FileDeleteDialog
               Cancel
             </Button>
           </DialogClose>
-          <Button
-            type="button"
-            variant="destructive"
-            onClick={handleDelete}
-            disabled={loading}
-          >
+          <Button type="button" variant="destructive" onClick={handleDelete} disabled={loading}>
             {loading ? 'Deleting...' : 'Delete'}
           </Button>
         </DialogFooter>

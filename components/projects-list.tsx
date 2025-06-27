@@ -1,6 +1,5 @@
 import Link from 'next/link'
 
-import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
@@ -9,7 +8,7 @@ import { ProjectActions } from '@/components/project-actions'
 import type { Project } from '@/lib/types/projects'
 import { formatDate } from '@/lib/utils'
 
-import { ArrowRight, CalendarDays, FileText, FolderClosed, Tags } from 'lucide-react'
+import { ArrowRight, CalendarDays, FileText, FolderClosed } from 'lucide-react'
 
 interface ProjectsListProps {
   projects?: Project[]
@@ -55,14 +54,6 @@ export function ProjectsList({ projects, isLoading, viewMode = 'grid' }: Project
               <div className="text-muted-foreground line-clamp-1 text-xs">
                 {project.description ?? 'No description'}
               </div>
-              <div className="mt-1 flex flex-wrap gap-1">
-                {project.tags?.length > 0 && <Tags className="text-muted-foreground h-4 w-4" />}
-                {project.tags?.map(tag => (
-                  <Badge variant="outline" key={tag}>
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
             </div>
             <div className="flex min-w-[120px] flex-col items-end gap-2">
               <span className="text-muted-foreground flex items-center gap-1 text-xs">
@@ -101,14 +92,6 @@ export function ProjectsList({ projects, isLoading, viewMode = 'grid' }: Project
             <div className="text-muted-foreground flex items-center gap-2 text-sm">
               <CalendarDays className="h-4 w-4" />
               <span>{formatDate(project.createdAt)}</span>
-            </div>
-            <div className="flex flex-wrap gap-1">
-              {project.tags?.length > 0 && <Tags className="text-muted-foreground h-4 w-4" />}
-              {project.tags?.map(tag => (
-                <Badge variant="outline" key={tag}>
-                  {tag}
-                </Badge>
-              ))}
             </div>
             <div className="flex justify-end gap-2 opacity-0 transition-opacity group-hover:opacity-100">
               <ProjectActions project={project} />

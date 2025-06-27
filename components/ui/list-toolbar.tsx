@@ -42,7 +42,7 @@ export function ListToolbar({
 }: ListToolbarProps) {
   return (
     <div className={cn('flex w-full flex-col gap-2', className)}>
-      <div className="flex flex-col md:flex-row gap-2 items-start justify-between">
+      <div className="flex flex-col items-start justify-between gap-2 md:flex-row">
         {/* Search with constrained width */}
         <div className="relative w-full md:w-72 lg:w-80">
           <Input
@@ -53,9 +53,9 @@ export function ListToolbar({
           />
           <Search className="text-muted-foreground absolute top-2.5 left-2 h-4 w-4" />
         </div>
-        
+
         {/* Sort controls and actions */}
-        <div className="flex w-full md:w-auto justify-between gap-2">
+        <div className="flex w-full justify-between gap-2 md:w-auto">
           <div className="flex gap-2">
             <Select value={sort} onValueChange={onSort}>
               <SelectTrigger id="sort" className="h-8 w-40">

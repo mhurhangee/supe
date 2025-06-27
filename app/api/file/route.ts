@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server'
 import { put } from '@vercel/blob'
+
+import { NextRequest, NextResponse } from 'next/server'
 
 import { db } from '@/lib/db/drizzle'
 import { files } from '@/lib/db/schema'
@@ -15,23 +16,20 @@ export async function GET(req: NextRequest) {
   try {
     // Auth user or throw error
     const userId = await getUserId()
-    
+
     // Get project filter from query params if present
     const { searchParams } = new URL(req.url)
     const projectId = searchParams.get('projectId')
-    
+
     // Execute query with appropriate conditions
-    let userFiles;
+    let userFiles
     if (projectId) {
       userFiles = await db
         .select()
         .from(files)
         .where(and(eq(files.userId, userId), eq(files.projectId, projectId)))
     } else {
-      userFiles = await db
-        .select()
-        .from(files)
-        .where(eq(files.userId, userId))
+      userFiles = await db.select().from(files).where(eq(files.userId, userId))
     }
 
     // Return success response and files
@@ -50,7 +48,7 @@ export async function POST(req: NextRequest) {
 
     const formData = await req.formData()
     const file = formData.get('file') as File
-    
+
     if (!file) {
       throw new Error('No file uploaded')
     }
@@ -61,16 +59,18 @@ export async function POST(req: NextRequest) {
     const projectId = formData.get('projectId') as string
     const tagsString = formData.get('tags') as string
     const tags = tagsString ? JSON.parse(tagsString) : []
-    
+
     // Validate metadata
-    const { title: validTitle, description: validDescription, projectId: validProjectId, tags: validTags } = parseIO(
-      FileUploadSchema,
-      { title, description, projectId: projectId || undefined, tags }
-    )
+    const {
+      title: validTitle,
+      description: validDescription,
+      projectId: validProjectId,
+      tags: validTags,
+    } = parseIO(FileUploadSchema, { title, description, projectId: projectId || undefined, tags })
 
     // Generate unique ID for the file
     const id = genId()
-    
+
     // Upload to Vercel Blob
     const blob = await put(`${userId}/${id}-${file.name}`, file, {
       access: 'public',

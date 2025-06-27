@@ -1,7 +1,8 @@
 'use client'
 
-import { LayoutGrid } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
+
+import { LayoutGrid } from 'lucide-react'
 
 export default function Dashboard() {
   return (

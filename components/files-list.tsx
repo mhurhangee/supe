@@ -1,6 +1,5 @@
 import Link from 'next/link'
 
-import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
@@ -9,7 +8,7 @@ import { FileActions } from '@/components/file-actions'
 import type { File } from '@/lib/types/files'
 import { formatDate } from '@/lib/utils'
 
-import { ArrowRight, CalendarDays, FileText, Tags } from 'lucide-react'
+import { ArrowRight, CalendarDays, FileText } from 'lucide-react'
 
 interface FilesListProps {
   files?: File[]
@@ -33,9 +32,7 @@ export function FilesList({ files, isLoading, viewMode = 'grid' }: FilesListProp
   }
 
   if (!files?.length) {
-    return (
-      <div className="text-muted-foreground col-span-2 py-8 text-center">No files found.</div>
-    )
+    return <div className="text-muted-foreground col-span-2 py-8 text-center">No files found.</div>
   }
 
   if (viewMode === 'list') {
@@ -54,14 +51,6 @@ export function FilesList({ files, isLoading, viewMode = 'grid' }: FilesListProp
               </Link>
               <div className="text-muted-foreground line-clamp-1 text-xs">
                 {file.description ?? 'No description'}
-              </div>
-              <div className="mt-1 flex flex-wrap gap-1">
-                {file.tags?.length > 0 && <Tags className="text-muted-foreground h-4 w-4" />}
-                {file.tags?.map(tag => (
-                  <Badge variant="outline" key={tag}>
-                    {tag}
-                  </Badge>
-                ))}
               </div>
             </div>
             <div className="flex min-w-[120px] flex-col items-end gap-2">
@@ -101,14 +90,6 @@ export function FilesList({ files, isLoading, viewMode = 'grid' }: FilesListProp
             <div className="text-muted-foreground flex items-center gap-2 text-sm">
               <CalendarDays className="h-4 w-4" />
               <span>{formatDate(file.createdAt)}</span>
-            </div>
-            <div className="flex flex-wrap gap-1">
-              {file.tags?.length > 0 && <Tags className="text-muted-foreground h-4 w-4" />}
-              {file.tags?.map(tag => (
-                <Badge variant="outline" key={tag}>
-                  {tag}
-                </Badge>
-              ))}
             </div>
             <div className="flex justify-end gap-2 opacity-0 transition-opacity group-hover:opacity-100">
               <FileActions file={file} />

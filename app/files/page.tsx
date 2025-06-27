@@ -5,9 +5,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ListToolbar } from '@/components/ui/list-toolbar'
 
-import { HubLayout } from '@/components/hub-layout'
 import { FileUploadDialog } from '@/components/file-upload-dialog'
 import { FilesList } from '@/components/files-list'
+import { HubLayout } from '@/components/hub-layout'
 
 import type { File } from '@/lib/types/files'
 import { fetcher } from '@/lib/utils'
@@ -36,9 +36,7 @@ export default function FilesPage() {
       const q = search.toLowerCase()
       result = result.filter(
         f =>
-          f.title.toLowerCase().includes(q) ||
-          (f.description?.toLowerCase().includes(q) ?? false) ||
-          f.tags?.some(tag => tag.toLowerCase().includes(q))
+          f.title.toLowerCase().includes(q) || (f.description?.toLowerCase().includes(q) ?? false)
       )
     }
     result = [...result].sort((a, b) => {
@@ -58,9 +56,9 @@ export default function FilesPage() {
       icon={<FileIcon className="h-5 w-5" />}
       breadcrumbs={[{ label: 'Files' }]}
       actions={
-          <FileUploadDialog onUploaded={() => mutate('/api/file')}>
-            <Button size="sm">Upload File</Button>
-          </FileUploadDialog>
+        <FileUploadDialog onUploaded={() => mutate('/api/file')}>
+          <Button size="sm">Upload File</Button>
+        </FileUploadDialog>
       }
     >
       <div className="mb-4 flex flex-col items-center justify-between gap-2 sm:flex-row">

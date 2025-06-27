@@ -1,21 +1,21 @@
 'use client'
 
+import Image from 'next/image'
+import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
 
-import { Badge } from '@/components/ui/badge'
-import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
-import Link from 'next/link'
-import { HubLayout } from '@/components/hub-layout'
+import { ParsedContent } from '@/components/ui/parsed-content'
+import { Skeleton } from '@/components/ui/skeleton'
+
 import { FileActions } from '@/components/file-actions'
+import { HubLayout } from '@/components/hub-layout'
 
 import { formatDate } from '@/lib/utils'
 
-import { CalendarDays, FileText, Tags, ArrowLeft, FileCode } from 'lucide-react'
+import { ArrowLeft, CalendarDays, FileText } from 'lucide-react'
 import useSWR from 'swr'
-import { ParsedContent } from '@/components/ui/parsed-content'
 
 export default function FileDetailsPage() {
   const { id } = useParams<{ id: string }>()
@@ -80,27 +80,15 @@ export default function FileDetailsPage() {
                 <CalendarDays className="h-4 w-4" />
                 <span>{formatDate(file.createdAt)}</span>
               </div>
-              <div className="text-muted-foreground flex items-center gap-2 text-sm">
-                <Tags className="h-4 w-4" />
-                {file.tags?.length ? (
-                  file.tags.map((tag: string) => (
-                    <Badge variant="outline" key={tag}>
-                      {tag}
-                    </Badge>
-                  ))
-                ) : (
-                  <span>No tags</span>
-                )}
-              </div>
             </div>
-          <FileActions
-            file={file}
-            showOpenButton={false}
-            onUpdated={handleUpdated}
-            onDeleted={handleDeleted}
-          />
+            <FileActions
+              file={file}
+              showOpenButton={false}
+              onUpdated={handleUpdated}
+              onDeleted={handleDeleted}
+            />
           </div>
-          
+
           <div className="space-y-4">
             <h3 className="flex items-center gap-2 font-semibold">
               <FileText className="h-4 w-4" /> Preview
@@ -108,26 +96,17 @@ export default function FileDetailsPage() {
             <div className="overflow-hidden rounded-md border">
               {isImage ? (
                 <div className="relative h-[400px] w-full">
-                  <Image 
-                    src={file.url}
-                    alt={file.title}
-                    fill
-                    className="object-contain"
-                  />
+                  <Image src={file.url} alt={file.title} fill className="object-contain" />
                 </div>
+              ) : file.parsedContent ? (
+                <ParsedContent content={file.parsedContent} />
               ) : (
-                file.parsedContent ? (
-                  <ParsedContent content={file.parsedContent} />  
-                ) : (
-                  <div className="flex flex-col py-8 space-y-8 items-center justify-center">
-                    <div className="text-muted-foreground">
-                      File is not yet parsed
-                    </div>
-                    <Link href={`/parse/${file.id}`}>
-                      <Button size="sm">Parse File</Button>
-                    </Link>
-                  </div>
-                )
+                <div className="flex flex-col items-center justify-center space-y-8 py-8">
+                  <div className="text-muted-foreground">File is not yet parsed</div>
+                  <Link href={`/parse/${file.id}`}>
+                    <Button size="sm">Parse File</Button>
+                  </Link>
+                </div>
               )}
             </div>
           </div>

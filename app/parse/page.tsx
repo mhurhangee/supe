@@ -5,12 +5,12 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { FileUpload, type UploadedFile } from '@/components/ui/file-upload'
+import { ParsedContent } from '@/components/ui/parsed-content'
 import { Skeleton } from '@/components/ui/skeleton'
 
 import { HubLayout } from '@/components/hub-layout'
 
 import { FileCode, Loader2 } from 'lucide-react'
-import { ParsedContent } from '@/components/ui/parsed-content'
 
 export default function ParsePdfPage() {
   const [uploadedPDFFile, setUploadedPDFFile] = useState<UploadedFile[]>([])

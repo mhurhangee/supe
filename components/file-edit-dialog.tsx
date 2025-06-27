@@ -14,7 +14,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { Multiselect } from '@/components/ui/multiselect'
 import { Textarea } from '@/components/ui/textarea'
 
 import type { File } from '@/lib/types/files'
@@ -34,7 +33,6 @@ export function FileEditDialog({ file, children, onUpdated }: FileEditDialogProp
   const [loading, setLoading] = useState(false)
   const [title, setTitle] = useState(file.title)
   const [description, setDescription] = useState(file.description || '')
-  const [tags, setTags] = useState<string[]>(file.tags || [])
   const [error, setError] = useState<string | null>(null)
 
   async function handleSubmit(e: React.FormEvent) {
@@ -43,7 +41,6 @@ export function FileEditDialog({ file, children, onUpdated }: FileEditDialogProp
     const { success, error: parseError } = parseClientIO(FileUpdateSchema, {
       title,
       description,
-      tags,
     })
     if (!success) {
       setError(parseError)
@@ -54,7 +51,7 @@ export function FileEditDialog({ file, children, onUpdated }: FileEditDialogProp
       const res = await fetch(`/api/file/${file.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, description, tags }),
+        body: JSON.stringify({ title, description }),
       })
       const data = await res.json()
       if (!res.ok || !data.success) throw new Error(data.error || 'Failed to update file')
@@ -92,14 +89,6 @@ export function FileEditDialog({ file, children, onUpdated }: FileEditDialogProp
             value={description}
             onChange={e => setDescription(e.target.value)}
             maxLength={512}
-            disabled={loading}
-          />
-          <Multiselect
-            value={tags}
-            onChange={setTags}
-            max={3}
-            maxLength={16}
-            placeholder="Add tag (max 3)"
             disabled={loading}
           />
           {error && <div className="text-destructive text-sm">{error}</div>}
