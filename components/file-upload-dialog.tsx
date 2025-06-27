@@ -14,12 +14,11 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { Multiselect } from '@/components/ui/multiselect'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-
-import { FileUploadSchema } from '@/lib/types/files'
-import { parseClientIO } from '@/lib/utils/parse-client-io'
+import { FileUpload, type UploadedFile } from '@/components/ui/file-upload'
 
 import { Upload } from 'lucide-react'
 import { toast } from 'sonner'
@@ -43,12 +42,13 @@ export function FileUploadDialog({
   const [internalOpen, setInternalOpen] = useState(false)
   const open = openProp !== undefined ? openProp : internalOpen
   const onOpenChange = onOpenChangeProp !== undefined ? onOpenChangeProp : setInternalOpen
-  const [loading, setLoading] = useState(false)
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [tags, setTags] = useState<string[]>([])
-  const [projectId, setProjectId] = useState<string>('')
-  const [file, setFile] = useState<File | null>(null)
+  const [projectId, setProjectId] = useState('none')
+  const [loading, setLoading] = useState(false)
+  const [fileUploadKey, setFileUploadKey] = useState(0)
   const [error, setError] = useState<string | null>(null)
   
   // Fetch projects for dropdown
@@ -56,55 +56,50 @@ export function FileUploadDialog({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setError(null)
-    
-    if (!file) {
+    if (uploadedFiles.length === 0) {
       setError('Please select a file to upload')
       return
     }
-    
-    const { success, error: parseError } = parseClientIO(FileUploadSchema, {
-      title,
-      description,
-      tags,
-      projectId: projectId || undefined,
-    })
-    
-    if (!success) {
-      setError(parseError)
-      return
-    }
-    
+
     setLoading(true)
-    
+    setError(null)
+
     try {
       const formData = new FormData()
-      formData.append('file', file)
-      formData.append('title', title)
+      formData.append('file', uploadedFiles[0].file)
+      formData.append('title', title || uploadedFiles[0].file.name)
       formData.append('description', description || '')
       formData.append('tags', JSON.stringify(tags))
       if (projectId && projectId !== 'none') {
         formData.append('projectId', projectId)
       }
-      
-      const res = await fetch('/api/file', {
+
+      const response = await fetch('/api/file', {
         method: 'POST',
         body: formData,
       })
-      
-      const data = await res.json()
-      if (!res.ok || !data.success) throw new Error(data.error || 'Failed to upload file')
-      
+
+      const data = await response.json()
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to upload file')
+      }
+
       toast.success('File uploaded successfully')
+
+      // Reset form
+      setUploadedFiles([])
       setTitle('')
       setDescription('')
       setTags([])
-      setProjectId('')
-      setFile(null)
+      setProjectId('none')
+      setFileUploadKey(prev => prev + 1) // Reset file upload component
+
+      // Close dialog and trigger refresh
+      onOpenChange(false)
       onUploaded?.()
-      onOpenChange(false) // Close dialog on success
-    } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : 'Failed to upload file')
+    } catch (err) {
+      console.error('Error uploading file:', err)
+      toast.error('Failed to upload file. Please try again.')
       setError(err instanceof Error ? err.message : 'Failed to upload file')
     } finally {
       setLoading(false)
@@ -157,31 +152,27 @@ export function FileUploadDialog({
               ))}
             </SelectContent>
           </Select>
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium">File</label>
-            <div className="flex items-center gap-2">
-              <Input
-                type="file"
-                onChange={e => setFile(e.target.files?.[0] || null)}
-                required
-                disabled={loading}
-                className="flex-1"
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="file">File</Label>
+              <FileUpload
+                key={fileUploadKey}
+                onFilesChange={setUploadedFiles}
+                maxFiles={1}
+                maxFileSize={10 * 1024 * 1024} // 10MB
+                acceptedFileTypes={['.pdf', '.jpg', '.jpeg', '.png', '.gif', '.webp']}
+                description="Drag & drop or click to upload (PDF or image)"
               />
-              {file && (
-                <div className="text-muted-foreground text-xs">
-                  {(file.size / 1024 / 1024).toFixed(2)} MB
-                </div>
-              )}
             </div>
           </div>
           {error && <div className="text-destructive text-sm">{error}</div>}
-          <DialogFooter>
+          <DialogFooter className="flex justify-end gap-2">
             <DialogClose asChild>
-              <Button type="button" variant="ghost" disabled={loading}>
+              <Button type="button" variant="outline" disabled={loading}>
                 Cancel
               </Button>
             </DialogClose>
-            <Button type="submit" disabled={loading} className="gap-2">
+            <Button type="submit" disabled={loading || uploadedFiles.length === 0} className="gap-2">
               {loading ? 'Uploading...' : 'Upload'}
               {!loading && <Upload className="h-4 w-4" />}
             </Button>
