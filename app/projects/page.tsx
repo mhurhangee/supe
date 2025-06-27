@@ -37,8 +37,7 @@ export default function ProjectsPage() {
       result = result.filter(
         p =>
           p.title.toLowerCase().includes(q) ||
-          (p.description?.toLowerCase().includes(q) ?? false) ||
-          p.tags?.some(tag => tag.toLowerCase().includes(q))
+          (p.description?.toLowerCase().includes(q) ?? false)
       )
     }
     result = [...result].sort((a, b) => {

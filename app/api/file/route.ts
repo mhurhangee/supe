@@ -57,16 +57,13 @@ export async function POST(req: NextRequest) {
     const title = formData.get('title') as string
     const description = formData.get('description') as string
     const projectId = formData.get('projectId') as string
-    const tagsString = formData.get('tags') as string
-    const tags = tagsString ? JSON.parse(tagsString) : []
 
     // Validate metadata
     const {
       title: validTitle,
       description: validDescription,
       projectId: validProjectId,
-      tags: validTags,
-    } = parseIO(FileUploadSchema, { title, description, projectId: projectId || undefined, tags })
+    } = parseIO(FileUploadSchema, { title, description, projectId: projectId || undefined })
 
     // Generate unique ID for the file
     const id = genId()
@@ -85,7 +82,6 @@ export async function POST(req: NextRequest) {
         projectId: validProjectId,
         title: validTitle,
         description: validDescription,
-        tags: validTags,
         url: blob.url,
       })
       .returning()
