@@ -1,5 +1,7 @@
 'use client'
 
+import { Separator } from '@/components/ui/separator'
+
 import { LayoutGrid } from 'lucide-react'
 
 export default function Dashboard() {
@@ -9,6 +11,7 @@ export default function Dashboard() {
         <LayoutGrid className="h-10 w-10" /> Dashboard
       </h1>
       <p className="superfier-subtitle">Welcome to your dashboard.</p>
+      <Separator />
     </main>
   )
 }
