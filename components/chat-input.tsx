@@ -2,9 +2,11 @@ import React, { KeyboardEvent, useRef } from 'react'
 
 import { Textarea } from '@/components/ui/textarea'
 
+import type { UploadedFile } from '@/lib/types/files'
 import { cn } from '@/lib/utils'
 
 import { ChatSendButton } from './chat-send-button'
+import { FileChips } from './file-selector'
 
 interface ChatInputProps {
   value: string
@@ -15,6 +17,7 @@ interface ChatInputProps {
   status: 'submitted' | 'streaming' | 'ready' | 'error'
   stop: () => void
   tools?: React.ReactNode
+  selectedFiles?: UploadedFile[]
 }
 
 export function ChatInput({
@@ -25,6 +28,7 @@ export function ChatInput({
   status,
   stop,
   tools,
+  selectedFiles = [],
 }: ChatInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -62,6 +66,11 @@ export function ChatInput({
     <div className="border-input relative flex w-full flex-col overflow-hidden rounded-lg border shadow-sm">
       {/* Main container with no internal borders */}
       <div className="flex w-full flex-col">
+        {selectedFiles.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2 px-3 py-2">
+            <FileChips selectedFiles={selectedFiles} onRemove={() => {}} readOnly />
+          </div>
+        )}
         {/* Textarea area */}
         <div className="relative w-full">
           <Textarea

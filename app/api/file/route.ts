@@ -5,7 +5,16 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db/drizzle'
 import { files } from '@/lib/db/schema'
 import { FileUploadSchema } from '@/lib/types/files'
-import { HTTP_STATUS, createErrorResponse, genId, getUserId, parseIO, parseFile, getLlamaCloudApiKey, isPdfFile } from '@/lib/utils'
+import {
+  HTTP_STATUS,
+  createErrorResponse,
+  genId,
+  getLlamaCloudApiKey,
+  getUserId,
+  isPdfFile,
+  parseFile,
+  parseIO,
+} from '@/lib/utils'
 
 import { and, eq } from 'drizzle-orm'
 
@@ -70,7 +79,12 @@ export async function POST(req: NextRequest) {
       description: validDescription,
       projectId: validProjectId,
       parsedContent: validParsedContent,
-    } = parseIO(FileUploadSchema, { title, description, projectId: projectId || undefined, parsedContent: parsedContent })
+    } = parseIO(FileUploadSchema, {
+      title,
+      description,
+      projectId: projectId || undefined,
+      parsedContent: parsedContent,
+    })
 
     // Generate unique ID for the file
     const id = genId()

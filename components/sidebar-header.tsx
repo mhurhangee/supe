@@ -7,7 +7,11 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 
 import { appConfig } from '@/lib/config'
 
+import { useIsMobile } from '@/hooks/use-mobile'
+
 export function SidebarHeader() {
+  const isMobile = useIsMobile()
+
   return (
     <SidebarHeaderComponent>
       <div className="flex flex-row items-center">
@@ -18,21 +22,25 @@ export function SidebarHeader() {
           <Logo iconSize="h-6 w-6" bgSize="h-8 w-8" />
           <span className="group-data-[collapsible=icon]:hidden">{appConfig.appName}</span>
         </Link>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <SidebarTrigger className="ml-auto group-data-[collapsible=icon]:hidden" />
-          </TooltipTrigger>
-          <TooltipContent side="right">Collapse Sidebar</TooltipContent>
-        </Tooltip>
+        {!isMobile && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <SidebarTrigger className="ml-auto group-data-[collapsible=icon]:hidden" />
+            </TooltipTrigger>
+            <TooltipContent side="right">Collapse Sidebar</TooltipContent>
+          </Tooltip>
+        )}
       </div>
-      <div className="flex hidden items-center justify-center group-data-[collapsible=icon]:block group-data-[state=collapsed]:block">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <SidebarTrigger className="" />
-          </TooltipTrigger>
-          <TooltipContent side="right">Expand Sidebar</TooltipContent>
-        </Tooltip>
-      </div>
+      {!isMobile && (
+        <div className="flex hidden items-center justify-center group-data-[collapsible=icon]:block group-data-[state=collapsed]:block">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <SidebarTrigger className="" />
+            </TooltipTrigger>
+            <TooltipContent side="right">Expand Sidebar</TooltipContent>
+          </Tooltip>
+        </div>
+      )}
     </SidebarHeaderComponent>
   )
 }

@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const FileSchema = z.object({
+export const UploadedFileSchema = z.object({
   id: z.string().length(12, 'Invalid file ID'),
   userId: z.string().max(255, 'Invalid user ID'),
   projectId: z.string().max(255, 'Invalid project ID').optional(),
@@ -15,9 +15,9 @@ export const FileSchema = z.object({
   updatedAt: z.date().default(() => new Date()),
 })
 
-export type File = z.infer<typeof FileSchema>
+export type UploadedFile = z.infer<typeof UploadedFileSchema>
 
-export const FileUpdateSchema = FileSchema.pick({
+export const FileUpdateSchema = UploadedFileSchema.pick({
   title: true,
   description: true,
   projectId: true,

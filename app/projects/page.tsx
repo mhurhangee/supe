@@ -36,8 +36,7 @@ export default function ProjectsPage() {
       const q = search.toLowerCase()
       result = result.filter(
         p =>
-          p.title.toLowerCase().includes(q) ||
-          (p.description?.toLowerCase().includes(q) ?? false)
+          p.title.toLowerCase().includes(q) || (p.description?.toLowerCase().includes(q) ?? false)
       )
     }
     result = [...result].sort((a, b) => {
@@ -63,7 +62,7 @@ export default function ProjectsPage() {
         </div>
       }
     >
-      <div className="mb-4 flex flex-col items-center justify-between gap-2 sm:flex-row">
+      <div className="mt-8 mb-4 flex flex-col items-center justify-between gap-2 sm:flex-row">
         <ListToolbar
           search={search}
           onSearch={setSearch}

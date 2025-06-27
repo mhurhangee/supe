@@ -11,6 +11,8 @@ import { ChatInput } from '@/components/chat-input'
 import { ChatScrollArea } from '@/components/chat-scroll-area'
 import { ChatTools } from '@/components/chat-tools'
 
+import type { UploadedFile } from '@/lib/types/files'
+
 import { DefaultChatTransport } from 'ai'
 import { Bot } from 'lucide-react'
 
@@ -18,17 +20,20 @@ export default function BasicChat() {
   const [toolWeb, setToolWeb] = useState(false)
   const [input, setInput] = useState('')
   const [debug, setDebug] = useState(false)
+  const [selectedFiles, setSelectedFiles] = useState<UploadedFile[]>([])
 
-  // Create a transport that updates when toolWeb changes
+  // Create a transport that updates when toolWeb or selectedFiles change
   const transport = new DefaultChatTransport({
     api: '/api/beta-chat',
     body: {
       toolWeb,
+      fileIds: selectedFiles.map(file => file.id),
     },
   })
 
   const { messages, setMessages, sendMessage, status, stop } = useChat({
     transport,
+    id: `beta-chat-${selectedFiles.map(f => f.id).join('-')}`,
   })
 
   const messagesEndRef = useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>
@@ -77,8 +82,11 @@ export default function BasicChat() {
                   setToolWeb={setToolWeb}
                   debug={debug}
                   setDebug={setDebug}
+                  selectedFiles={selectedFiles}
+                  onFilesChange={setSelectedFiles}
                 />
               }
+              selectedFiles={selectedFiles}
             />
           </form>
         </CardFooter>

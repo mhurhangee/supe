@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 
+import { BackToButton } from '@/components/ui/back-to-button'
 import { Button } from '@/components/ui/button'
 import { ParsedContent } from '@/components/ui/parsed-content'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -16,7 +17,6 @@ import { formatDate } from '@/lib/utils'
 
 import { CalendarDays, FileText } from 'lucide-react'
 import useSWR from 'swr'
-import { BackToButton } from '@/components/ui/back-to-button'
 
 export default function FileDetailsPage() {
   const { id } = useParams<{ id: string }>()
@@ -56,40 +56,31 @@ export default function FileDetailsPage() {
           file?.description || 'No description'
         )
       }
-      breadcrumbs={[
-        { label: 'Files', href: '/files' },
-        { label: isLoading ? '...' : file?.title || 'File' },
-      ]}
-      actions={
-        <BackToButton href="/files" label="Files" />
-      }
+      actions={<BackToButton href="/files" label="Files" />}
     >
-      {isLoading ? (
-        <Skeleton className="h-40 w-full" />
-      ) : error ? (
-        <div className="text-destructive">{error.message || error.toString()}</div>
-      ) : file ? (
-        <div className="space-y-6">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div className="flex flex-col gap-2">
-              <div className="text-muted-foreground flex items-center gap-2 text-sm">
-                <CalendarDays className="h-4 w-4" />
-                <span>{formatDate(file.createdAt)}</span>
+      <div className="mt-8 mb-4">
+        {isLoading ? (
+          <Skeleton className="h-40 w-full" />
+        ) : error ? (
+          <div className="text-destructive">{error.message || error.toString()}</div>
+        ) : file ? (
+          <div className="space-y-6">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div className="flex flex-col gap-2">
+                <div className="text-muted-foreground flex items-center gap-2 text-sm">
+                  <CalendarDays className="h-4 w-4" />
+                  <span>{formatDate(file.createdAt)}</span>
+                </div>
               </div>
+              <FileActions
+                file={file}
+                showOpenButton={false}
+                onUpdated={handleUpdated}
+                onDeleted={handleDeleted}
+              />
             </div>
-            <FileActions
-              file={file}
-              showOpenButton={false}
-              onUpdated={handleUpdated}
-              onDeleted={handleDeleted}
-            />
-          </div>
 
-          <div className="space-y-4">
-            <h3 className="flex items-center gap-2 font-semibold">
-              <FileText className="h-4 w-4" /> Preview
-            </h3>
-            <div className="overflow-hidden rounded-md border">
+            <div className="space-y-4">
               {isImage ? (
                 <div className="relative h-[400px] w-full">
                   <Image src={file.url} alt={file.title} fill className="object-contain" />
@@ -106,8 +97,8 @@ export default function FileDetailsPage() {
               )}
             </div>
           </div>
-        </div>
-      ) : null}
+        ) : null}
+      </div>
     </HubLayout>
   )
 }

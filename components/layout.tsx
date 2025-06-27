@@ -2,28 +2,19 @@
 
 import React from 'react'
 
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { SidebarProvider } from '@/components/ui/sidebar'
 
 import { LayoutContent } from '@/components/layout-content'
 import { Sidebar } from '@/components/sidebar'
-
-import { useIsMobile } from '@/hooks/use-mobile'
 
 interface LayoutProps {
   children: React.ReactNode
 }
 
 export function Layout({ children }: LayoutProps) {
-  const isMobile = useIsMobile()
-
   return (
     <SidebarProvider defaultOpen={true}>
       <Sidebar />
-      {isMobile && (
-        <div className="absolute top-4 right-4 z-50">
-          <SidebarTrigger />
-        </div>
-      )}
       <LayoutContent>{children}</LayoutContent>
     </SidebarProvider>
   )

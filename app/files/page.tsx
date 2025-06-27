@@ -9,7 +9,7 @@ import { FileUploadDialog } from '@/components/file-upload-dialog'
 import { FilesList } from '@/components/files-list'
 import { HubLayout } from '@/components/hub-layout'
 
-import type { File } from '@/lib/types/files'
+import type { UploadedFile } from '@/lib/types/files'
 import { fetcher } from '@/lib/utils'
 
 import { FileIcon } from 'lucide-react'
@@ -17,7 +17,7 @@ import { toast } from 'sonner'
 import useSWR, { mutate } from 'swr'
 
 export default function FilesPage() {
-  const { data, error, isLoading } = useSWR<{ files: File[] }>('/api/file', fetcher)
+  const { data, error, isLoading } = useSWR<{ files: UploadedFile[] }>('/api/file', fetcher)
 
   // Toolbar state
   const [search, setSearch] = useState('')
@@ -52,16 +52,15 @@ export default function FilesPage() {
   return (
     <HubLayout
       title={<span className="flex items-center gap-2">Files</span>}
-      description="Manage your uploaded files."
+      description="Manage your uploaded filesaaa."
       icon={<FileIcon className="h-5 w-5" />}
-      breadcrumbs={[{ label: 'Files' }]}
       actions={
         <FileUploadDialog onUploaded={() => mutate('/api/file')}>
           <Button size="sm">Upload File</Button>
         </FileUploadDialog>
       }
     >
-      <div className="mb-4 flex flex-col items-center justify-between gap-2 sm:flex-row">
+      <div className="mt-8 mb-4 flex flex-col items-center justify-between gap-2 sm:flex-row">
         <ListToolbar
           search={search}
           onSearch={setSearch}

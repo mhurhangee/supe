@@ -23,9 +23,9 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 
-import type { File } from '@/lib/types/files'
-import type { Project } from '@/lib/types/projects'
+import type { UploadedFile } from '@/lib/types/files'
 import { FileUpdateSchema } from '@/lib/types/files'
+import type { Project } from '@/lib/types/projects'
 import { fetcher } from '@/lib/utils'
 import { parseClientIO } from '@/lib/utils/parse-client-io'
 
@@ -33,7 +33,7 @@ import { toast } from 'sonner'
 import useSWR from 'swr'
 
 interface FileEditDialogProps {
-  file: File
+  file: UploadedFile
   children: React.ReactNode
   onUpdated?: () => void
 }
@@ -45,7 +45,7 @@ export function FileEditDialog({ file, children, onUpdated }: FileEditDialogProp
   const [description, setDescription] = useState(file.description || '')
   const [projectId, setProjectId] = useState(file.projectId || 'none')
   const [error, setError] = useState<string | null>(null)
-  
+
   // Fetch projects for dropdown
   const { data: projectsData } = useSWR<{ projects: Project[] }>('/api/project', fetcher)
 
