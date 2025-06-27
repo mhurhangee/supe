@@ -4,16 +4,13 @@ import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { CopyToClipboardButton } from '@/components/ui/copy-to-clipboard-button'
-import { DownloadButton } from '@/components/ui/download-button'
 import { FileUpload, type UploadedFile } from '@/components/ui/file-upload'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import { HubLayout } from '@/components/hub-layout'
-import { Markdown } from '@/components/markdown'
 
 import { FileCode, Loader2 } from 'lucide-react'
+import { ParsedContent } from '@/components/ui/parsed-content'
 
 export default function ParsePdfPage() {
   const [uploadedPDFFile, setUploadedPDFFile] = useState<UploadedFile[]>([])
@@ -92,36 +89,7 @@ export default function ParsePdfPage() {
 
         {error && <div className="rounded-md bg-red-50 p-4 text-red-700">{error}</div>}
 
-        {parsedContent && (
-          <Tabs defaultValue="parsed-content">
-            <TabsList>
-              <TabsTrigger value="parsed-content">Parsed Content</TabsTrigger>
-              <TabsTrigger value="raw-content">Raw Content</TabsTrigger>
-            </TabsList>
-            <TabsContent value="parsed-content">
-              <Card className="p-4">
-                <div className="flex justify-end gap-2">
-                  <CopyToClipboardButton content={parsedContent} />
-                  <DownloadButton content={parsedContent} />
-                </div>
-                <div className="prose max-w-none">
-                  <Markdown>{parsedContent}</Markdown>
-                </div>
-              </Card>
-            </TabsContent>
-            <TabsContent value="raw-content">
-              <Card className="p-4">
-                <div className="flex justify-end gap-2">
-                  <CopyToClipboardButton content={parsedContent} />
-                  <DownloadButton content={parsedContent} />
-                </div>
-                <div className="prose max-w-none">
-                  <pre className="whitespace-pre-wrap">{parsedContent}</pre>
-                </div>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        )}
+        {parsedContent && <ParsedContent content={parsedContent} />}
 
         {isLoading && (
           <div className="flex flex-col items-center justify-center py-8">

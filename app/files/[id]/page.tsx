@@ -7,14 +7,15 @@ import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
-
+import Link from 'next/link'
 import { HubLayout } from '@/components/hub-layout'
 import { FileActions } from '@/components/file-actions'
 
 import { formatDate } from '@/lib/utils'
 
-import { CalendarDays, Download, FileText, Tags } from 'lucide-react'
+import { CalendarDays, FileText, Tags, ArrowLeft, FileCode } from 'lucide-react'
 import useSWR from 'swr'
+import { ParsedContent } from '@/components/ui/parsed-content'
 
 export default function FileDetailsPage() {
   const { id } = useParams<{ id: string }>()
@@ -58,19 +59,13 @@ export default function FileDetailsPage() {
         { label: 'Files', href: '/files' },
         { label: isLoading ? '...' : file?.title || 'File' },
       ]}
-      backTo={{
-        label: 'Files',
-        href: '/files',
-      }}
       actions={
-        file && (
-          <FileActions
-            file={file}
-            showOpenButton={false}
-            onUpdated={handleUpdated}
-            onDeleted={handleDeleted}
-          />
-        )
+        <Link href="/files">
+          <Button size="sm" variant="ghost">
+            <ArrowLeft className="h-4 w-4" />
+            Files
+          </Button>
+        </Link>
       }
     >
       {isLoading ? (
@@ -98,12 +93,12 @@ export default function FileDetailsPage() {
                 )}
               </div>
             </div>
-            <Button asChild className="gap-2">
-              <a href={file.url} target="_blank" rel="noopener noreferrer" download>
-                <Download className="h-4 w-4" />
-                Download
-              </a>
-            </Button>
+          <FileActions
+            file={file}
+            showOpenButton={false}
+            onUpdated={handleUpdated}
+            onDeleted={handleDeleted}
+          />
           </div>
           
           <div className="space-y-4">
@@ -121,30 +116,20 @@ export default function FileDetailsPage() {
                   />
                 </div>
               ) : (
-                <div className="flex h-40 items-center justify-center">
-                  <a 
-                    href={file.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex flex-col items-center gap-2"
-                  >
-                    <FileText className="h-16 w-16" />
-                    <span>Click to view file</span>
-                  </a>
-                </div>
+                file.parsedContent ? (
+                  <ParsedContent content={file.parsedContent} />  
+                ) : (
+                  <div className="flex flex-col py-8 space-y-8 items-center justify-center">
+                    <div className="text-muted-foreground">
+                      File is not yet parsed
+                    </div>
+                    <Link href={`/parse/${file.id}`}>
+                      <Button size="sm">Parse File</Button>
+                    </Link>
+                  </div>
+                )
               )}
             </div>
-            
-            {file.parsedContent && (
-              <div className="space-y-2">
-                <h3 className="flex items-center gap-2 font-semibold">
-                  <FileText className="h-4 w-4" /> Content
-                </h3>
-                <div className="max-h-96 overflow-auto rounded border p-4">
-                  <pre className="whitespace-pre-wrap">{file.parsedContent}</pre>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       ) : null}

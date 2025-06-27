@@ -55,14 +55,12 @@ export default function FilesPage() {
     <HubLayout
       title={<span className="flex items-center gap-2">Files</span>}
       description="Manage your uploaded files."
-      icon={<FileIcon />}
+      icon={<FileIcon className="h-5 w-5" />}
       breadcrumbs={[{ label: 'Files' }]}
       actions={
-        <div className="flex items-center gap-3">
           <FileUploadDialog onUploaded={() => mutate('/api/file')}>
-            <Button className="cursor-pointer">Upload File</Button>
+            <Button size="sm">Upload File</Button>
           </FileUploadDialog>
-        </div>
       }
     >
       <div className="mb-4 flex flex-col items-center justify-between gap-2 sm:flex-row">

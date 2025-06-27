@@ -53,14 +53,13 @@ export default function ProjectsPage() {
 
   return (
     <HubLayout
-      title={<span className="flex items-center gap-2">Projects</span>}
-      description="A list of your AI project workspaces."
-      icon={<FoldersIcon />}
-      breadcrumbs={[{ label: 'Projects' }]}
+      title="Projects"
+      description="Manage your AI project workspaces."
+      icon={<FoldersIcon className="h-5 w-5" />}
       actions={
         <div className="flex items-center gap-3">
           <CreateProjectDialog onCreated={() => mutate('/api/project')}>
-            <Button className="cursor-pointer">Create Project</Button>
+            <Button size="sm">Create Project</Button>
           </CreateProjectDialog>
         </div>
       }
