@@ -32,6 +32,7 @@ export const FileUploadSchema = z.object({
     .max(52, 'Title must be at most 52 characters'),
   description: z.string().max(512, 'Description must be at most 512 characters').optional(),
   projectId: z.string().optional(),
+  parsedContent: z.string().optional(),
 })
 
 export type FileUpload = z.infer<typeof FileUploadSchema>

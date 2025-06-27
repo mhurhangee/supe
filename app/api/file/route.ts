@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db/drizzle'
 import { files } from '@/lib/db/schema'
 import { FileUploadSchema } from '@/lib/types/files'
-import { HTTP_STATUS, createErrorResponse, genId, getUserId, parseIO } from '@/lib/utils'
+import { HTTP_STATUS, createErrorResponse, genId, getUserId, parseIO, parseFile, getLlamaCloudApiKey, isPdfFile } from '@/lib/utils'
 
 import { and, eq } from 'drizzle-orm'
 
@@ -58,12 +58,19 @@ export async function POST(req: NextRequest) {
     const description = formData.get('description') as string
     const projectId = formData.get('projectId') as string
 
+    let parsedContent = ''
+    if (isPdfFile(file)) {
+      const apiKey = getLlamaCloudApiKey()
+      parsedContent = await parseFile(file, apiKey)
+    }
+
     // Validate metadata
     const {
       title: validTitle,
       description: validDescription,
       projectId: validProjectId,
-    } = parseIO(FileUploadSchema, { title, description, projectId: projectId || undefined })
+      parsedContent: validParsedContent,
+    } = parseIO(FileUploadSchema, { title, description, projectId: projectId || undefined, parsedContent: parsedContent })
 
     // Generate unique ID for the file
     const id = genId()
@@ -83,6 +90,7 @@ export async function POST(req: NextRequest) {
         title: validTitle,
         description: validDescription,
         url: blob.url,
+        parsedContent: validParsedContent,
       })
       .returning()
 
