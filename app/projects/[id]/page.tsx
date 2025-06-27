@@ -9,12 +9,15 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { FileActions } from '@/components/file-actions'
 import { HubLayout } from '@/components/hub-layout'
 import { ProjectActions } from '@/components/project-actions'
+import { Button } from '@/components/ui/button'
+import { ArrowLeft } from 'lucide-react'
 
 import type { File } from '@/lib/types/files'
 import { formatDate } from '@/lib/utils'
 
 import { CalendarDays, FileText, FolderClosed } from 'lucide-react'
 import useSWR from 'swr'
+import { BackToButton } from '@/components/ui/back-to-button'
 
 function ProjectFiles({ projectId }: { projectId: string }) {
   const { data, error, isLoading } = useSWR(`/api/file?projectId=${projectId}`, url =>
@@ -109,42 +112,43 @@ export default function ProjectDetailsPage() {
         href: '/projects',
       }}
       actions={
-        project && (
+        <BackToButton href="/projects" label="Projects" />
+      }
+    >
+  {
+    isLoading?(
+        <Skeleton className = "h-40 w-full" />
+      ): error ? (
+      <div className="text-destructive">{error.message || error.toString()}</div>
+    ) : project ? (
+      <div className="space-y-6">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+
+          <div className="flex flex-col gap-2">
+            <div className="text-muted-foreground flex items-center gap-2 text-sm">
+              <CalendarDays className="h-4 w-4" />
+              <span>{formatDate(project.createdAt)}</span>
+            </div>
+          </div>
           <ProjectActions
             project={project}
             showOpenButton={false}
             onUpdated={handleUpdated}
             onDeleted={handleDeleted}
           />
-        )
-      }
-    >
-      {isLoading ? (
-        <Skeleton className="h-40 w-full" />
-      ) : error ? (
-        <div className="text-destructive">{error.message || error.toString()}</div>
-      ) : project ? (
-        <div className="space-y-6">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div className="flex flex-col gap-2">
-              <div className="text-muted-foreground flex items-center gap-2 text-sm">
-                <CalendarDays className="h-4 w-4" />
-                <span>{formatDate(project.createdAt)}</span>
-              </div>
-            </div>
-          </div>
-          <div className="space-y-4">
-            <h3 className="flex items-center gap-2 font-semibold">
-              <FileText className="h-4 w-4" /> Files
-            </h3>
-            <ProjectFiles projectId={id} />
-            <h3 className="flex items-center gap-2 font-semibold">
-              <FileText className="h-4 w-4" /> Chats
-            </h3>
-            <ProjectChats />
-          </div>
         </div>
-      ) : null}
-    </HubLayout>
+        <div className="space-y-4">
+          <h3 className="flex items-center gap-2 font-semibold">
+            <FileText className="h-4 w-4" /> Files
+          </h3>
+          <ProjectFiles projectId={id} />
+          <h3 className="flex items-center gap-2 font-semibold">
+            <FileText className="h-4 w-4" /> Chats
+          </h3>
+          <ProjectChats />
+        </div>
+      </div>
+    ) : null}
+    </HubLayout >
   )
 }

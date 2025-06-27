@@ -14,8 +14,9 @@ import { HubLayout } from '@/components/hub-layout'
 
 import { formatDate } from '@/lib/utils'
 
-import { ArrowLeft, CalendarDays, FileText } from 'lucide-react'
+import { CalendarDays, FileText } from 'lucide-react'
 import useSWR from 'swr'
+import { BackToButton } from '@/components/ui/back-to-button'
 
 export default function FileDetailsPage() {
   const { id } = useParams<{ id: string }>()
@@ -60,12 +61,7 @@ export default function FileDetailsPage() {
         { label: isLoading ? '...' : file?.title || 'File' },
       ]}
       actions={
-        <Link href="/files">
-          <Button size="sm" variant="ghost">
-            <ArrowLeft className="h-4 w-4" />
-            Files
-          </Button>
-        </Link>
+        <BackToButton href="/files" label="Files" />
       }
     >
       {isLoading ? (
