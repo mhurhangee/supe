@@ -14,12 +14,12 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 
-import type { File } from '@/lib/types/files'
+import type { UploadedFile } from '@/lib/types/files'
 
 import { toast } from 'sonner'
 
 interface FileDeleteDialogProps {
-  file: File
+  file: UploadedFile
   children: React.ReactNode
   onDeleted?: () => void
 }

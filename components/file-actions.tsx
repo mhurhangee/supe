@@ -7,13 +7,13 @@ import { Button } from '@/components/ui/button'
 import { FileDeleteDialog } from '@/components/file-delete-dialog'
 import { FileEditDialog } from '@/components/file-edit-dialog'
 
-import type { File } from '@/lib/types/files'
+import type { UploadedFile } from '@/lib/types/files'
 
 import { Download, Edit2, Trash2 } from 'lucide-react'
 import { mutate } from 'swr'
 
 export interface FileActionsProps {
-  file: File
+  file: UploadedFile
   showOpenButton?: boolean
   onUpdated?: () => void
   onDeleted?: () => void

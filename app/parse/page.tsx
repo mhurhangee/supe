@@ -52,10 +52,9 @@ export default function ParsePdfPage() {
 
   return (
     <HubLayout
-      title={<span className="flex items-center gap-2">Parse PDF</span>}
+      title="Parse PDF"
       description="Upload a PDF file and parse it into markdown."
       icon={<FileCode />}
-      breadcrumbs={[{ label: 'Parse PDF' }]}
     >
       <div className="flex flex-col gap-6">
         <div className="mx-auto flex w-[300px]">

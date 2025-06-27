@@ -25,6 +25,23 @@ export const fileToDataUrl = (file: File): Promise<string> => {
   })
 }
 
+export const urlToDataUrl = async (url: string): Promise<string> => {
+  // Fetch the file from the URL
+  const response = await fetch(url)
+  if (!response.ok) {
+    throw new Error(`Failed to fetch file from URL: ${url}`)
+  }
+  
+  // Convert the response to a blob
+  const blob = await response.blob()
+  
+  // Convert the blob to a File object
+  const file = new File([blob], 'file', { type: blob.type })
+  
+  // Use the existing fileToDataUrl function
+  return fileToDataUrl(file)
+}
+
 export const validateFile = (
   file: File,
   acceptedTypes?: string[],
@@ -97,10 +114,7 @@ export async function dataUrlToArrayBuffer(dataUrl: string): Promise<ArrayBuffer
  * @param markdownResult OCR result in markdown format
  * @returns The modified messages array
  */
-export function appendOcrResultToMessage(
-  messages: UIMessage[],
-  markdownResult: string
-): UIMessage[] {
+export function appendTextResultToMessage(messages: UIMessage[], textResult: string): UIMessage[] {
   const lastMessageIndex = messages.length - 1
   if (lastMessageIndex < 0) return messages
 
@@ -115,13 +129,13 @@ export function appendOcrResultToMessage(
     // Create a new part with the same type and updated text
     lastMessage.parts[textPartIndex] = {
       type: 'text',
-      text: `${textPart.text}\n\nOCR Result from PDF:\n\n${markdownResult}`,
+      text: `${textPart.text}\n\n${textResult}`,
     }
   } else {
     // Add a new text part
     lastMessage.parts.push({
       type: 'text',
-      text: `OCR Result from PDF:\n\n${markdownResult}`,
+      text: `The following text was extracted from a file:\n\n${textResult}`,
     })
   }
 

@@ -21,13 +21,9 @@ export default function FileQAPage() {
   const [debug, setDebug] = useState(false)
   const [selectedFiles, setSelectedFiles] = useState<UploadedFile[]>([])
 
-  // Create a transport that updates when toolWeb or selectedFiles change
+  // Create a transport that includes toolWeb and fileIds
   const transport = new DefaultChatTransport({
-    api: '/api/beta-chat',
-    body: {
-      toolWeb,
-      fileIds: selectedFiles.map(file => file.id),
-    },
+    api: '/api/file-qa',
   })
 
   const { messages, setMessages, sendMessage, status, stop } = useChat({
@@ -59,7 +55,10 @@ export default function FileQAPage() {
         <form
           onSubmit={e => {
             e.preventDefault()
-            sendMessage({ text: input })
+            sendMessage(
+              { role: 'user', parts: [{ type: 'text', text: input }] },
+              { body: { toolWeb, fileIds: selectedFiles.map(file => file.id) } }
+            )
             setInput('')
           }}
           className="w-full"
